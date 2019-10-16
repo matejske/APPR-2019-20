@@ -2,6 +2,9 @@ source("lib/libraries.r")
 #loc <- locale(encoding = 'UTF-8', decimal_mark = ',', grouping_mark = '.')
 
 #1. TABELA: BDP v tekočih cenah (v milijonih evrov) (1998-2018)------------------------------------
+
+# https://en.wikipedia.org/wiki/Economy_of_the_European_Union
+
 bdp <- read.csv(file = 'podatki/BDP.csv', 
                 col.names = c("A", "Drzava", "Leto", "B", "BDP.E"),
                 na = c(":", " ", "", "-"))
