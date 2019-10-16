@@ -88,10 +88,21 @@ eko.potrosnja$Drzava <- gsub('^Germany.*', 'Germany', eko.potrosnja$Drzava)
 
 
 #5. TABELA: Izmerjene vrednosti emisij (v tonah)---------------------------------------------------
-emisije <- read.csv(file = 'podatki/emisije.csv', dec = '.',
-                 col.names = c("A", "Drzava", "Leto", "Merjen.plin", "Sector.gospodarstva", "Izpuscene.emisije"),
-                 na = c(":", " ", "", "-"), encoding=('Windows-1250'))
+emisije <- read_csv('podatki/emisije.csv', na=c(":", " ", "", "-"), skip=1,
+                    locale=locale(grouping_mark=" ", encoding="Windows-1250"),
+                    col_names=c("Enota", "Drzava", "Leto", "Merjen.plin",
+                                "Sector.gospodarstva", "Izpuscene.emisije"))
 
+
+#Janos komentar:
+# Po brisanju sumarnih podatkov je razpredelnica emisije že v obliki tidy data, 
+# tako da razpredelnica skupno.plini ni potrebna (razen morda za prikaz podatkov - 
+# v tem primeru si lahko pomagaš s funkcijo spread iz knjižnice tidyr). 
+# Tudi vsote ni smiselno imeti v razpredelnici, pač pa jo lahko sproti izračunaš 
+# (npr. pri izrisovanju grafa):
+#   
+#   emisije %>% group_by(Drzava, Leto, Sector.gospodarstva) %>%
+#   summarise(Skupne.emisije=sum(Izpuscene.emisije, na.rm=TRUE))
 
 emisije <- emisije  %>% filter(Leto > 1997) %>%
   filter(Drzava != "European Union - 28 countries" &
