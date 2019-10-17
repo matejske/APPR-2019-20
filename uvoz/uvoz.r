@@ -1,8 +1,6 @@
 source("lib/libraries.r")
 
-
 #1. TABELA: BDP v tekočih cenah (v milijonih evrov) (1998-2018)------------------------------------
-
 bdp <- read_csv('podatki/BDP.csv', skip = 1,
                 col_names = c("A", "Drzava", "Leto", "B", "BDP.E"),
                 na = c(":", " ", "", "-"),
@@ -20,6 +18,8 @@ bdp <- bdp %>% filter(BDP.E != "") %>% filter(Leto > 1997) %>%
 bdp$Drzava <- gsub('^Germany.*', 'Germany', bdp$Drzava)
 
 bdp$BDP.E <- as.numeric(bdp$BDP.E)
+
+
 
 #2. TABELA: ŠTEVILO PREBIVALCEV -------------------------------------------------------------------
 populacija <- read_csv('podatki/populacija.csv', skip = 1,
@@ -45,6 +45,8 @@ populacija$Drzava <- gsub('^France.*', 'France', populacija$Drzava)
 
 populacija$Stevilo.prebivalcev <- as.numeric(populacija$Stevilo.prebivalcev)
 
+
+
 #3. TABELA: Konsolidirani državni dolg (v milijonih evrov)-----------------------------------------
 dolg <- read_csv(file = 'podatki/dolg.csv', skip = 1,
                  locale=locale(grouping_mark=".", encoding="Windows-1250"),
@@ -69,7 +71,7 @@ dolg$Drzava <- gsub('^Germany.*', 'Germany', dolg$Drzava)
 
 dolg$Dolg <- as.numeric(dolg$Dolg)
 
-dolg.slovenija <- filter(dolg, Drzava =='Slovenia')
+#dolg.slovenija <- filter(dolg, Drzava =='Slovenia')
 
 
 
@@ -78,7 +80,6 @@ eko.potrosnja <- read_csv(file = 'podatki/ekoloska_potrosnja.csv', skip = 1,
                           locale=locale(grouping_mark=".", encoding="Windows-1250"),
                           col_names = c("A", "Drzava", "Leto", "B", "Izdatki.za.ekologijio"),
                           na = c(":", " ", "", "-"))
-
 
 eko.potrosnja <- eko.potrosnja[, c(-1, -4)]
 eko.potrosnja <- eko.potrosnja  %>% filter(Izdatki.za.ekologijio != "") %>% filter(Leto > 1997) %>% 
@@ -94,10 +95,12 @@ eko.potrosnja <- eko.potrosnja  %>% filter(Izdatki.za.ekologijio != "") %>% filt
            Drzava != "Euro area (17 countries)" & 
            Drzava != "Euro area (12 countries)")
 
-
 eko.potrosnja$Drzava <- gsub('^Germany.*', 'Germany', eko.potrosnja$Drzava)
 
 eko.potrosnja$Izdatki.za.ekologijio <- as.numeric(eko.potrosnja$Izdatki.za.ekologijio)
+
+
+
 
 #5. TABELA: Izmerjene vrednosti emisij (v tonah)---------------------------------------------------
 emisije <- read_csv('podatki/emisije.csv', na=c(":", " ", "", "-"), skip=1,
@@ -105,8 +108,8 @@ emisije <- read_csv('podatki/emisije.csv', na=c(":", " ", "", "-"), skip=1,
                     col_names=c("Enota", "Drzava", "Leto", "Merjen.plin",
                                 "Sector.gospodarstva", "Izpuscene.emisije"))
 
-emisije %>% group_by(Drzava, Leto, Sector.gospodarstva) %>%
-summarise(Skupne.emisije=sum(Izpuscene.emisije, na.rm=TRUE))
+emisije %>% group_by(Drzava, Leto, Sector.gospodarstva) %>% 
+  summarise(Skupne.emisije=sum(Izpuscene.emisije, na.rm=TRUE))
 
 emisije <- emisije  %>% filter(Leto > 1997) %>%
   filter(Drzava != "European Union - 28 countries" &
@@ -121,8 +124,9 @@ emisije <- emisije  %>% filter(Leto > 1997) %>%
            Drzava != "Euro area (17 countries)" &
            Drzava != "Euro area (12 countries)")
 
-emisije$Izpuscene.emisije <- as.numeric(emisije$Izpuscene.emisije)
 emisije$Drzava <- gsub('^Germany.*', 'Germany', emisije$Drzava)
+emisije$Izpuscene.emisije <- as.numeric(emisije$Izpuscene.emisije)
+
 
 metan <- emisije %>% filter(Merjen.plin == "Methane")
 metan <- metan[,-4]
@@ -133,9 +137,11 @@ no.2 <- no.2[,-4]
 
 skupno.plini <- inner_join(metan, co.2, by = c("Drzava", "Leto", "Sector.gospodarstva"))
 skupno.plini <- inner_join(skupno.plini, no.2, by = c("Drzava", "Leto", "Sector.gospodarstva"))
-skupno.plini$skupne.emisije <- skupno.plini$Izpuscene.emisije.x + skupno.plini$Izpuscene.emisije.y+ skupno.plini$Izpuscene.emisije
-
+skupno.plini$skupne.emisije <- skupno.plini$Izpuscene.emisije.x + skupno.plini$Izpuscene.emisije.y +
+  skupno.plini$Izpuscene.emisije
 skupno.plini <- skupno.plini[, c(-(4:9), -1)]
+
+
 
 #6. TABELA: Pobrani davki s strani ekoloških dajatev (v miljonih evrov)----------------------------
 eko.davki <- read_csv(file = 'podatki/ekoloski_davki.csv', skip = 1,
@@ -160,6 +166,7 @@ eko.davki <- eko.davki[,c(-1,-4)]
 eko.davki$Drzava <- gsub('^Germany.*', 'Germany', eko.davki$Drzava)
 
 eko.davki$Pobrani.davki <- as.numeric(eko.davki$Pobrani.davki)
+
 
 
 #=IZRAČUNI==================================================================================
@@ -192,9 +199,12 @@ ekoizdatki.v.davkih <- transform(ekoizdatki.v.davkih, ekoizdatki.v.davkih.stolpe
                                             ekoizdatki.v.davkih$Pobrani.davki), digits = 4))
 ekoizdatki.v.davkih <- ekoizdatki.v.davkih[,c(-3,-4)]
 
+
+
 #IZVOZ TABEL=====================================================================================
-write.csv2(bdp,'podatki/tidy_bdp.csv', fileEncoding = 'UTF-8')
+write.csv2(bdp,'podatki/tidy_BDP.csv', fileEncoding = 'UTF-8')
 write.csv2(populacija,'podatki/tidy_populacija.csv', fileEncoding = 'UTF-8')
 write.csv2(dolg,'podatki/tidy_dolg.csv', fileEncoding = 'UTF-8')
 write.csv2(eko.potrosnja,'podatki/tidy_ekoloska_potrosnja.csv', fileEncoding = 'UTF-8')
 write.csv2(eko.davki,'podatki/tidy_ekoloski_davki.csv', fileEncoding = 'UTF-8')
+write.csv2(emisije,'podatki/tidy_emisije.csv', fileEncoding = 'UTF-8')
