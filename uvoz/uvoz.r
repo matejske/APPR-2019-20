@@ -75,7 +75,7 @@ dolg$Dolg <- as.numeric(dolg$Dolg)
 
 
 
-#4. TABELA: Izdatki držav za ekologijo (v milijonih evrov)-----------------------------------------
+#4. TABELA: Izdatki držav za ekologijo (v milijonih evrov)----POPRAVI DA VSA LETA-------------------------------------
 eko.potrosnja <- read_csv(file = 'podatki/ekoloska_potrosnja.csv', skip = 1,
                           locale=locale(grouping_mark=".", encoding="Windows-1250"),
                           col_names = c("A", "Drzava", "Leto", "B", "Izdatki.za.ekologijio"),
@@ -139,6 +139,7 @@ skupno.plini <- inner_join(metan, co.2, by = c("Drzava", "Leto", "Sector.gospoda
 skupno.plini <- inner_join(skupno.plini, no.2, by = c("Drzava", "Leto", "Sector.gospodarstva"))
 skupno.plini$skupne.emisije <- skupno.plini$Izpuscene.emisije.x + skupno.plini$Izpuscene.emisije.y +
   skupno.plini$Izpuscene.emisije
+skupno.plini <- skupno.plini%>%filter(Sector.gospodarstva == 'Total - all NACE activities')
 skupno.plini <- skupno.plini[, c(-(4:9), -1)]
 
 emisije <- emisije[,-1]
