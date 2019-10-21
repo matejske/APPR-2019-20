@@ -33,34 +33,34 @@ svet <- uvozi.zemljevid("https://www.naturalearthdata.com/http//www.naturalearth
 #zace <- ggplot(skupno.plini, aes(x=Leto, y=skupne.emisije, col=Drzava)) + geom_point() + geom_line()
 
 
-# Zemljevid sveta skrčimo na zemljevid Evrope
+#Zemljevid sveta skrčimo na zemljevid Evrope
 europe <- svet %>% filter(CONTINENT == "Europe") %>% 
-  filter(long < 55 & long > -35 & lat > 30 & lat < 75) %>%
+  filter(long < 55 & long > -25 & lat > 35 & lat < 72) %>%
   filter(NAME != "Jersey") %>%
   filter(NAME != "Russia")
 
 colnames(europe)[26] <- 'Drzava'
 
-# Drzave v zemljevidu europe
+#Drzave v zemljevidu europe
 drzave <- sort(unique(europe$NAME)) 
 drzave <- as.data.frame(drzave, stringsAsFactors=FALSE) 
 names(drzave) <- "Drzava"
 
-test <-ggplot() + geom_polygon(data = europe, aes(x=long, y=lat, group=group))
-print(test)
+zemljevid.evropa <-ggplot() + geom_polygon(data = europe, aes(x=long, y=lat, group=group))
+print(zemljevid.evropa)
 
 
 #DODAJ info iz issuea
 
 #FUNKCIJA ZA SHINY
 
-#plotly==================================================================
+#Plotly=============================================================================================
 plotly.tabela <- inner_join(eko.davki,eko.potrosnja,by = c('Drzava','Leto')) 
 plotly.tabela <- plotly.tabela %>% filter(Izdatki.za.ekologijio != '')%>% filter(Leto > 2009)
 plotly.graf <- ggplot(data = plotly.tabela, aes(x=Izdatki.za.ekologijio, y=Pobrani.davki, color=Drzava)) + 
   geom_point(aes(frame=Leto, ids=Drzava)) + scale_x_continuous()
 plotly.graf <- ggplotly(plotly.graf, dynamicTics=TRUE)
 
-
+print(plotly.graf)
 
 
