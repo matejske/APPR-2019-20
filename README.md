@@ -12,7 +12,7 @@ Analiziral bom podatke o okoljski ozaveščenosti evropskih držav. Za merilo oz
 
 Da bom lahko opazoval povezave med temi spremenljivkami, bom podatke uredil v sledeče tabele. 
 
-Tabele:
+Tabele: (##ALI MORAM TU IZPISAT ORIGINALNE TABELE, ALI TABELE V TIDY DATA)
 * tabela 1: država, leto, BDP (v milijonih evrov)
 * tabela 2: država, leto, STEVILO PREBIVALCEV
 * tabela 3: država, leto, KONSOLIDIRANI DRZAVNI DOLG (v milijonih evrov)
@@ -22,7 +22,13 @@ Tabele:
 
 Podatki bodo obsegali obdobje zadnjih 20 let, torej 1998 - 2018.
 
-vira: 
+Viri: 
+* https://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=nama_10_gdp&lang=en (ZELIM V HTML)
+* https://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=demo_pjan&lang=en
+* https://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=gov_10dd_ggd&lang=en
+* https://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=env_ac_epneis&lang=en
+* https://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=env_ac_ainah_r2&lang=en
+* https://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=env_ac_tax&lang=en
 
 
 ## Program
