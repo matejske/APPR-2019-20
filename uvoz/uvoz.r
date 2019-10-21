@@ -201,7 +201,7 @@ ekoizdatki.v.davkih <- transform(ekoizdatki.v.davkih, ekoizdatki.v.davkih.stolpe
                                             ekoizdatki.v.davkih$Pobrani.davki), digits = 4))
 ekoizdatki.v.davkih <- ekoizdatki.v.davkih[,c(-3,-4)]
 
-eudrzave <- unique(bdp$Drzava)
+
 
 
 #IZVOZ TABEL=====================================================================================

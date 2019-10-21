@@ -18,6 +18,10 @@ europe <- filter(europe, long < 55 & long > -35 & lat > 30 & lat < 75)
 europe <- filter(europe, NAME != "Jersey")
 europe <- filter(europe, NAME != "Russia")
 
+
+
+
+
 # Drzave v zemljevidu Evrope
 drzave <- sort(unique(europe$NAME)) 
 drzave <- as.data.frame(drzave, stringsAsFactors=FALSE) 
