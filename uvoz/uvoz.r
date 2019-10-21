@@ -141,6 +141,8 @@ skupno.plini$skupne.emisije <- skupno.plini$Izpuscene.emisije.x + skupno.plini$I
   skupno.plini$Izpuscene.emisije
 skupno.plini <- skupno.plini[, c(-(4:9), -1)]
 
+emisije <- emisije[,-1]
+
 
 
 #6. TABELA: Pobrani davki s strani ekoloških dajatev (v miljonih evrov)----------------------------
