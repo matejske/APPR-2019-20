@@ -13,12 +13,12 @@ Analiziral bom podatke o okoljski ozaveščenosti evropskih držav. Za merilo oz
 Da bom lahko opazoval povezave med temi spremenljivkami, bom podatke uredil v sledeče tabele. 
 
 Tabele:
-* tabela 1: država, leto, BDP
+* tabela 1: država, leto, BDP (v milijonih evrov)
 * tabela 2: država, leto, STEVILO PREBIVALCEV
-* tabela 3: država, leto, KONSOLIDIRANI DRZAVNI DOLG
-* tabela 4: država, leto, IZDATKI ZA EKOLOGIJO
+* tabela 3: država, leto, KONSOLIDIRANI DRZAVNI DOLG (v milijonih evrov)
+* tabela 4: država, leto, IZDATKI ZA EKOLOGIJO (v milijonih evrov)
 * tabela 5: država, leto, merjen plin, sektor gospodarstva, KOLICINA IZPUSCENIH EMISIJ (v tonah)
-* tabela 6: država, leto, POBRANI EKOLOSKI DAVKI
+* tabela 6: država, leto, POBRANI EKOLOSKI DAVKI (v milijonih evrov)
 
 Podatki bodo obsegali obdobje zadnjih 20 let, torej 1998 - 2018.
 
