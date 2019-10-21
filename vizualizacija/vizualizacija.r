@@ -1,24 +1,12 @@
 source("lib/libraries.r")
 source('uvoz/uvoz.r')
-#===================
+#============================================================================================
 #Graf ekoizdatkov Slovenije v letih 1998 - 2018==============================================
 davki.slovenije <- eko.davki %>% filter(Drzava == "Slovenia")
 
 graf.davki.slo <- ggplot(davki.slovenije, aes(x = Leto, y = Pobrani.davki)) + 
   geom_point() + geom_line()
-
-
-
-
-
-#Zemljevid INDEKSA eko izdatkov/bdp 
-
-
-
-#Zemljevid INDEKSA eko izdatkov/bdp 
-
-
-
+print(graf.davki.slo)
 
 
 
@@ -41,7 +29,7 @@ europe <- svet %>% filter(CONTINENT == "Europe") %>%
 
 colnames(europe)[26] <- 'Drzava'
 
-#Drzave v zemljevidu europe
+#Drzave v zemljevidu "europe"
 drzave <- sort(unique(europe$NAME)) 
 drzave <- as.data.frame(drzave, stringsAsFactors=FALSE) 
 names(drzave) <- "Drzava"
@@ -52,15 +40,34 @@ print(zemljevid.evropa)
 
 #DODAJ info iz issuea
 
-#FUNKCIJA ZA SHINY
+
+
+#Zemljevid INDEKSA eko izdatkov/bdp 
+
+
+
+#Zemljevid INDEKSA eko izdatkov/bdp 
+
+
+
+#FUNKCIJA ZA SHINY=================================================================================
+
+
 
 #Plotly=============================================================================================
-plotly.tabela <- inner_join(eko.davki,eko.potrosnja,by = c('Drzava','Leto')) 
-plotly.tabela <- plotly.tabela %>% filter(Izdatki.za.ekologijio != '')%>% filter(Leto > 2009)
-plotly.graf <- ggplot(data = plotly.tabela, aes(x=Izdatki.za.ekologijio, y=Pobrani.davki, color=Drzava)) + 
+#Plotly: Pobrani davki in izdatki za ekologijo
+plotly.tabela <- inner_join(eko.davki, eko.potrosnja, by = c('Drzava','Leto')) %>%
+  filter(Leto > 2009)
+plotly.graf <- ggplot(data = plotly.tabela, aes(x=Izdatki.za.ekologijio, y=Pobrani.davki, color=Drzava)) +
   geom_point(aes(frame=Leto, ids=Drzava)) + scale_x_continuous()
 plotly.graf <- ggplotly(plotly.graf, dynamicTics=TRUE)
-
 print(plotly.graf)
 
+#Plotly: Pobrani davki in izmerjene vrednosti emisij
+plotly.tabela2 <- inner_join(eko.davki, skupno.plini, by = c('Drzava','Leto')) %>% 
+  filter(Leto >= "2008")
+plotly.graf2 <- ggplot(data = plotly.tabela2, aes(x=Pobrani.davki, y=skupne.emisije, color=Drzava)) + 
+  geom_point(aes(frame=Leto, ids=Drzava)) + scale_x_continuous()
+plotly.graf2 <- ggplotly(plotly.graf2, dynamicTics=TRUE)
+print(plotly.graf2)
 

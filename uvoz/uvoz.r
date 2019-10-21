@@ -137,12 +137,11 @@ no.2 <- no.2[,-4]
 
 skupno.plini <- inner_join(metan, co.2, by = c("Drzava", "Leto", "Sector.gospodarstva"))
 skupno.plini <- inner_join(skupno.plini, no.2, by = c("Drzava", "Leto", "Sector.gospodarstva"))
-skupno.plini$skupne.emisije <- skupno.plini$Izpuscene.emisije.x + skupno.plini$Izpuscene.emisije.y +
-  skupno.plini$Izpuscene.emisije
+skupno.plini$skupne.emisije <- skupno.plini$Izpuscene.emisije.x + 
+  skupno.plini$Izpuscene.emisije.y + skupno.plini$Izpuscene.emisije
 skupno.plini <- skupno.plini%>%filter(Sector.gospodarstva == 'Total - all NACE activities')
 skupno.plini <- skupno.plini[, c(-(4:9), -1)]
 
-emisije <- emisije[,-1]
 
 
 
