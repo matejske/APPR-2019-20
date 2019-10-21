@@ -5,10 +5,25 @@ Repozitorij z gradivi pri predmetu APPR v študijskem letu 2019/20
 * [![Shiny](http://mybinder.org/badge.svg)](http://mybinder.org/v2/gh/jaanos/APPR-2019-20/master?urlpath=shiny/APPR-2019-20/projekt.Rmd) Shiny
 * [![RStudio](http://mybinder.org/badge.svg)](http://mybinder.org/v2/gh/jaanos/APPR-2019-20/master?urlpath=rstudio) RStudio
 
-## Tematika
+## Analiza okoljske ozaveščenosti evropskih držav
 
-Izbrali si boste temo, s katero se bo vaš projekt ukvarjal.
-Tukaj boste napisali, kje ste dobili podatke, ter kakšen je vaš cilj.
+Analiziral bom podatke o okoljski ozaveščenosti evropskih držav. Za merilo ozaveščanosti bom izbral izdatke posamezne države za ekologijo, izmerjene vrednosti emisij treh najbolj škodljivih toplogrednih plinov in pobrane davke s strani ekoloških dajatev. Zgoraj omenjene podatke bom primerjal z BDP-jem, številom prebivalcev in konsolidiranim državnim dolgom. Analiziral bom, ali obstaja korelacija med BDP-jem na prebivalca in vrednostmi emisij, kateri sektorji gospodarstva so največji onasneževalci okolja,... Analiziral bom tudi, kako gospodarska kriza vpliva na vrednosti emisij gospodarstva in ekološke izdatke države.
+
+
+Da bom lahko opazoval povezave med temi spremenljivkami, bom podatke uredil v sledeče tabele. 
+
+Tabele:
+* tabela 1: država, leto, BDP
+* tabela 2: država, leto, STEVILO PREBIVALCEV
+* tabela 3: država, leto, KONSOLIDIRANI DRZAVNI DOLG
+* tabela 4: država, leto, IZDATKI ZA EKOLOGIJO
+* tabela 5: država, leto, merjen plin, sektor gospodarstva, KOLICINA IZPUSCENIH EMISIJ (v tonah)
+* tabela 6: država, leto, POBRANI EKOLOSKI DAVKI
+
+Podatki bodo obsegali obdobje zadnjih 20 let, torej 1998 - 2018.
+
+vira: 
+
 
 ## Program
 
