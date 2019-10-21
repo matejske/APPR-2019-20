@@ -75,7 +75,7 @@ dolg$Dolg <- as.numeric(dolg$Dolg)
 
 
 
-#4. TABELA: Izdatki držav za ekologijo (v milijonih evrov)----POPRAVI DA VSA LETA-------------------------------------
+#4. TABELA: Izdatki držav za ekologijo (v milijonih evrov) (2006-2018)-------------------------------------
 eko.potrosnja <- read_csv(file = 'podatki/ekoloska_potrosnja.csv', skip = 1,
                           locale=locale(grouping_mark=".", encoding="Windows-1250"),
                           col_names = c("A", "Drzava", "Leto", "B", "Izdatki.za.ekologijio"),

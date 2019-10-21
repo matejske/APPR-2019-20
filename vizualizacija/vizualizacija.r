@@ -1,5 +1,5 @@
 source("lib/libraries.r")
-#source('uvoz/uvoz.r')
+source('uvoz/uvoz.r')
 #===================
 #Graf ekoizdatkov Slovenije v letih 1998 - 2018==============================================
 davki.slovenije <- eko.davki %>% filter(Drzava == "Slovenia")
@@ -24,11 +24,11 @@ graf.davki.slo <- ggplot(davki.slovenije, aes(x = Leto, y = Pobrani.davki)) +
 
 
 # Uvozimo zemljevid Sveta=======================================================================
-# source("https://raw.githubusercontent.com/jaanos/APPR-2018-19/master/lib/uvozi.zemljevid.r")
+source("https://raw.githubusercontent.com/jaanos/APPR-2018-19/master/lib/uvozi.zemljevid.r")
 source("lib/uvozi.zemljevid.r") #Nastavi pravo datoteko
 
-#svet <- uvozi.zemljevid("https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_countries.zip",
-                        #"ne_50m_admin_0_countries", encoding = "utf-8") %>% fortify()
+svet <- uvozi.zemljevid("https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_countries.zip", 
+                        "ne_50m_admin_0_countries", encoding = "utf-8") %>% fortify()
 
 zace <- ggplot(skupno.plini, aes(x=Leto, y=skupne.emisije, col=Drzava)) + geom_point() + geom_line()
 
