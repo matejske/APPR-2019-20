@@ -9,8 +9,6 @@ graf.davki.slo <- ggplot(davki.slovenije, aes(x = Leto, y = Pobrani.davki)) +
 print(graf.davki.slo)
 
 
-
-
 # Uvozimo zemljevid sveta=======================================================================
 source("https://raw.githubusercontent.com/jaanos/APPR-2018-19/master/lib/uvozi.zemljevid.r")
 source("lib/uvozi.zemljevid.r") #Nastavi pravo datoteko
@@ -39,6 +37,9 @@ print(zemljevid.evropa)
 
 
 #DODAJ info iz issuea
+ggplot() + geom_polygon(data=bdp %>% filter(Leto == 2017) %>% 
+                          right_join(europe, by=c("Drzava"="NAME")), aes(x=long, y=lat, 
+                                                                         group=group, fill=BDP.E))
 
 
 
