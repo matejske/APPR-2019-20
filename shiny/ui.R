@@ -1,8 +1,8 @@
 library(shiny)
-source('vizualizacija/vizualizacija.r')
+
 shinyUI(fluidPage(
   
-  titlePanel("Zemljevid"),
+  titlePanel(""),
   
   
   
@@ -13,4 +13,3 @@ shinyUI(fluidPage(
   ),
   mainPanel(plotOutput("zemljevid.leto")))
 )
-

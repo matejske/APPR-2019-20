@@ -1,5 +1,4 @@
 library(shiny)
-source('vizualizacija/vizualizacija.r')
 
 function(input, output) {
   
