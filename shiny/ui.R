@@ -1,17 +1,16 @@
 library(shiny)
-
+source('vizualizacija/vizualizacija.r')
 shinyUI(fluidPage(
   
-  titlePanel("Slovenske občine"),
+  titlePanel("Zemljevid"),
   
-  tabsetPanel(
-      tabPanel("Velikost družine",
-               DT::dataTableOutput("druzine")),
-      
-      tabPanel("Število naselij",
-               sidebarPanel(
-                  uiOutput("pokrajine")
-                ),
-               mainPanel(plotOutput("naselja")))
-    )
-))
+  
+  
+  sidebarPanel(
+    sliderInput("leto", "Izberi leto", min=2008, max=2017,
+                value=2008, step=1, sep='', animate = 
+                  animationOptions(interval = 250))
+  ),
+  mainPanel(plotOutput("zemljevid.leto")))
+)
+

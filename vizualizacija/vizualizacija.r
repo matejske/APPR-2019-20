@@ -1,20 +1,19 @@
 source("lib/libraries.r")
-source('uvoz/uvoz.r')
+#source('uvoz/uvoz.r')
 #============================================================================================
 #Graf ekoizdatkov Slovenije v letih 1998 - 2018==============================================
 davki.slovenije <- eko.davki %>% filter(Drzava == "Slovenia")
 
 graf.davki.slo <- ggplot(davki.slovenije, aes(x = Leto, y = Pobrani.davki)) + 
   geom_point() + geom_line()
-print(graf.davki.slo)
+plot(graf.davki.slo)
 
 
 # Uvozimo zemljevid sveta=======================================================================
-source("https://raw.githubusercontent.com/jaanos/APPR-2018-19/master/lib/uvozi.zemljevid.r")
 source("lib/uvozi.zemljevid.r") #Nastavi pravo datoteko
 
-svet <- uvozi.zemljevid("https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_countries.zip", 
-                        "ne_50m_admin_0_countries", encoding = "utf-8") %>% fortify()
+#svet <- uvozi.zemljevid("https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_countries.zip", 
+#                        "ne_50m_admin_0_countries", encoding = "utf-8") %>% fortify()
 
 #zace <- ggplot(skupno.plini, aes(x=Leto, y=skupne.emisije, col=Drzava)) + geom_point() + geom_line()
 
@@ -42,7 +41,7 @@ zemljevid.evropa <- ggplot() + geom_polygon(data=bdp %>% filter(Leto == 2017) %>
                                                                          group=group, fill=BDP.E))
 
 
-print(zemljevid.evropa)
+plot(zemljevid.evropa)
 
 
 #Zemljevid INDEKSA eko izdatkov/bdp 
@@ -54,18 +53,18 @@ print(zemljevid.evropa)
 
 
 #FUNKCIJA ZA SHINY=================================================================================
-
+zemljevid.leto <- function(cifra) {
+  
+  ggplot() + geom_polygon(data = bdp %>% filter(Leto == cifra) %>% 
+                            right_join(europe, by=c("Drzava"="NAME")),
+                          aes(x = long, y = lat, group = group, fill= Odstotki))+
+    xlab("") + ylab("")  + theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank(), panel.background = element_blank()) + 
+    scale_fill_gradient(low = '#ffb3b3', high='#660000')
+  
+}
 
 
 #Plotly=============================================================================================
-#Plotly: Pobrani davki in izdatki za ekologijo
-plotly.tabela <- inner_join(eko.davki, eko.potrosnja, by = c('Drzava','Leto')) %>%
-  filter(Leto > 2009)
-plotly.graf <- ggplot(data = plotly.tabela, aes(x=Izdatki.za.ekologijio, y=Pobrani.davki, color=Drzava)) +
-  geom_point(aes(frame=Leto, ids=Drzava)) + scale_x_continuous()
-plotly.graf <- ggplotly(plotly.graf, dynamicTics=TRUE)
-print(plotly.graf)
-
 #Plotly: Pobrani davki in izmerjene vrednosti emisij
 plotly.tabela2 <- inner_join(eko.davki, skupno.plini, by = c('Drzava','Leto')) %>% 
   filter(Leto >= "2008")
