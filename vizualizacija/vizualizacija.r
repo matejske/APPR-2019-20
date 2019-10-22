@@ -1,23 +1,18 @@
 source("lib/libraries.r")
-#source('uvoz/uvoz.r')
-
-#https://medium.com/@HollyEmblem/joining-data-with-dplyr-in-r-874698eb8898
+source('uvoz/uvoz.r')
 #============================================================================================
 #Graf ekoizdatkov Slovenije v letih 1998 - 2018==============================================
 davki.slovenije <- eko.davki %>% filter(Drzava == "Slovenia")
-
 graf.davki.slo <- ggplot(davki.slovenije, aes(x = Leto, y = Pobrani.davki)) + 
   geom_point() + geom_line()
 plot(graf.davki.slo)
 
 
-# Uvozimo zemljevid sveta=======================================================================
+#Uvozimo zemljevid sveta=====================================================================
 source("lib/uvozi.zemljevid.r") #Nastavi pravo datoteko
 
-#svet <- uvozi.zemljevid("https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_countries.zip", 
-#                        "ne_50m_admin_0_countries", encoding = "utf-8") %>% fortify()
-
-#zace <- ggplot(skupno.plini, aes(x=Leto, y=skupne.emisije, col=Drzava)) + geom_point() + geom_line()
+svet <- uvozi.zemljevid("https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_countries.zip", 
+                        "ne_50m_admin_0_countries", encoding = "utf-8") %>% fortify()
 
 
 #Zemljevid sveta skrčimo na zemljevid Evrope
@@ -33,27 +28,24 @@ drzave <- sort(unique(europe$NAME))
 drzave <- as.data.frame(drzave, stringsAsFactors=FALSE) 
 names(drzave) <- "Drzava"
 
-#zemljevid.evropa <-ggplot() + geom_polygon(data = europe, aes(x=long, y=lat, group=group))
-
-
-
-#DODAJ info iz issuea
-zemljevid.evropa <- ggplot() + geom_polygon(data=bdp %>% filter(Leto == 2017) %>% 
-                          right_join(europe, by=c("Drzava"="NAME")), aes(x=long, y=lat, 
-                                                                         group=group, fill=BDP.E))+theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank(), panel.background = element_blank(), legend.position = 'none')
-
+zemljevid.evropa <- ggplot() + 
+  geom_polygon(data=bdp %>% 
+                 filter(Leto == 2017) %>% 
+                 right_join(europe, by=c("Drzava"="NAME")), aes(x=long, y=lat, group=group, fill=BDP.E)) + 
+  theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank(), 
+        panel.background = element_blank(), legend.position = 'none')
 
 plot(zemljevid.evropa)
 
-#cluster
-
+#Cluster=====================================================================================
 podobnosti <- dcast(bdp, Drzava~Leto, value.var = 'BDP.E')
-priprava.plini <- filter(skupno.plini, Leto > 2007)
-priprava.plini <- dcast(priprava.plini, Drzava ~ Leto, value.var = 'skupne.emisije')
+priprava.plini <- skupno.plini %>% 
+  filter(Leto > 2007) %>% 
+  dcast(Drzava ~ Leto, value.var = 'skupne.emisije')
 podobnosti <- right_join(podobnosti, priprava.plini, by=c('Drzava'))
 
 podobnosti.a <- podobnosti[,-1]
-fit<-hclust(dist(scale(podobnosti.a)))
+fit <- hclust(dist(scale(podobnosti.a)))
 skupine2 <- cutree(fit, 7)
 
 cluster2 <- mutate(podobnosti, skupine2)
@@ -78,7 +70,7 @@ zemljevid.leto <- function(cifra) {
   
   ggplot() + geom_polygon(data = bdp %>% filter(Leto == cifra) %>% 
                             right_join(europe, by=c("Drzava"="NAME")),
-                          aes(x = long, y = lat, group = group, fill= Odstotki))+
+                          aes(x = long, y = lat, group = group, fill=BDP.E))+
     xlab("") + ylab("")  + theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank(), panel.background = element_blank()) + 
     scale_fill_gradient(low = '#ffb3b3', high='#660000')
   
