@@ -171,7 +171,7 @@ eko.davki$Pobrani.davki <- as.numeric(eko.davki$Pobrani.davki)
 
 
 
-#=IZRAČUNI==================================================================================
+#=IZRAČUNI novih vrednosti in indeksov==================================================================================
 #BDP NA PREBIVALCA
 bdp.pc <- inner_join(bdp, populacija, by=c("Drzava", "Leto"))
 bdp.pc <- transform(bdp.pc, bdp.pc.stolpec = round(((bdp.pc$BDP.E/bdp.pc$Stevilo.prebivalcev)*

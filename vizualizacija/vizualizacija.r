@@ -28,14 +28,34 @@ drzave <- sort(unique(europe$NAME))
 drzave <- as.data.frame(drzave, stringsAsFactors=FALSE) 
 names(drzave) <- "Drzava"
 
-zemljevid.evropa <- ggplot() + 
-  geom_polygon(data=bdp %>% 
+#Zemljevid evropskih drzav v letu 2017 (obarvane glede na velikost BDP)
+zemljevid.bdp.2017 <- ggplot() + 
+  geom_polygon(data = bdp %>% 
                  filter(Leto == 2017) %>% 
                  right_join(europe, by=c("Drzava"="NAME")), aes(x=long, y=lat, group=group, fill=BDP.E)) + 
   theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank(), 
-        panel.background = element_blank(), legend.position = 'none')
+        panel.background = element_blank(), legend.position = 'none') + 
+  labs(title = "Zemljevid evropskih držav", 
+       subtitle = "BDP v letu 2017") +
+  theme(plot.title = element_text(hjust = 0.5, size = 15, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5))
 
-plot(zemljevid.evropa)
+plot(zemljevid.bdp.2017)
+
+#Zemljevid INDEKSA eko izdatkov/bdp============================================================
+zemljevid.izdatki.v.bdp.2018 <- ggplot() + 
+  geom_polygon(data = ekoizdatki.v.bdp %>% 
+                 filter(Leto == 2018) %>% 
+                 right_join(europe, by=c("Drzava"="NAME")), aes(x=long, y=lat, group=group, fill=ekoizdatki.v.bdp.stolpec)) + 
+  theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank(), 
+        panel.background = element_blank(), legend.position = 'none') + 
+  labs(title = "Zemljevid indeksa izdatki za ekologijo glede na BDP",
+       subtitle = "(evropske države v letu 2018)") +
+  theme(plot.title = element_text(hjust = 0.5, size = 15, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5))
+
+plot(zemljevid.izdatki.v.bdp.2018)
+
 
 #Cluster=====================================================================================
 podobnosti <- dcast(bdp, Drzava~Leto, value.var = 'BDP.E')
@@ -56,14 +76,6 @@ zemljevid_cluster <- ggplot() +
   theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank(), panel.background = element_blank(), legend.position = 'none') + 
   # guides(fill=guide_colorbar(title='Skupine')) + 
   ggtitle('nekaj')
-
-#Zemljevid INDEKSA eko izdatkov/bdp 
-
-
-
-
-
-
 
 #FUNKCIJA ZA SHINY=================================================================================
 zemljevid.leto <- function(cifra) {
