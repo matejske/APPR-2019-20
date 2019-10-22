@@ -32,15 +32,17 @@ drzave <- sort(unique(europe$NAME))
 drzave <- as.data.frame(drzave, stringsAsFactors=FALSE) 
 names(drzave) <- "Drzava"
 
-zemljevid.evropa <-ggplot() + geom_polygon(data = europe, aes(x=long, y=lat, group=group))
-print(zemljevid.evropa)
+#zemljevid.evropa <-ggplot() + geom_polygon(data = europe, aes(x=long, y=lat, group=group))
+
 
 
 #DODAJ info iz issuea
-ggplot() + geom_polygon(data=bdp %>% filter(Leto == 2017) %>% 
+zemljevid.evropa <- ggplot() + geom_polygon(data=bdp %>% filter(Leto == 2017) %>% 
                           right_join(europe, by=c("Drzava"="NAME")), aes(x=long, y=lat, 
                                                                          group=group, fill=BDP.E))
 
+
+print(zemljevid.evropa)
 
 
 #Zemljevid INDEKSA eko izdatkov/bdp 
