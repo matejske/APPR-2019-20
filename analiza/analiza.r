@@ -1,11 +1,11 @@
-# 4. faza: Analiza podatkov
+source('lib/libraries.r')
 
-podatki <- obcine %>% transmute(obcina, povrsina, gostota,
-                                gostota.naselij=naselja/povrsina) %>%
-  left_join(povprecja, by="obcina")
-row.names(podatki) <- podatki$obcina
-podatki$obcina <- NULL
+eko.potrosnja.slovenija<-eko.potrosnja%>%filter(Drzava == 'Slovenia')
 
-# Število skupin
-n <- 5
-skupine <- hclust(dist(scale(podatki))) %>% cutree(n)
+napoved <- lm(data=eko.potrosnja.slovenija, eko.potrosnja.slovenija$Izdatki.za.ekologijio ~Leto)
+dodatna.leta <- data.frame(Leto=seq(2016,2020,1))
+napoved.potrosnje<-mutate(dodatna.leta, Izdatki.za.ekologijio=predict(napoved,dodatna.leta))
+
+graf.napovedi.praga <- ggplot(eko.potrosnja.slovenija, aes(x=Leto, y=Izdatki.za.ekologijio)) + geom_point(data=napoved.potrosnje, inherit.aes = TRUE) + 
+  geom_smooth(method=lm, fullrange=TRUE, color='green') + geom_point() + scale_x_continuous('Leto',breaks = seq(2008, 2020, 1), limits = c(2008, 2020))
+

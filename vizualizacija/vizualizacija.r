@@ -1,5 +1,7 @@
 source("lib/libraries.r")
 #source('uvoz/uvoz.r')
+
+#https://medium.com/@HollyEmblem/joining-data-with-dplyr-in-r-874698eb8898
 #============================================================================================
 #Graf ekoizdatkov Slovenije v letih 1998 - 2018==============================================
 davki.slovenije <- eko.davki %>% filter(Drzava == "Slovenia")
@@ -38,17 +40,36 @@ names(drzave) <- "Drzava"
 #DODAJ info iz issuea
 zemljevid.evropa <- ggplot() + geom_polygon(data=bdp %>% filter(Leto == 2017) %>% 
                           right_join(europe, by=c("Drzava"="NAME")), aes(x=long, y=lat, 
-                                                                         group=group, fill=BDP.E))
+                                                                         group=group, fill=BDP.E))+theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank(), panel.background = element_blank(), legend.position = 'none')
 
 
 plot(zemljevid.evropa)
 
+#cluster
+
+podobnosti <- dcast(bdp, Drzava~Leto, value.var = 'BDP.E')
+priprava.plini <- filter(skupno.plini, Leto > 2007)
+priprava.plini <- dcast(priprava.plini, Drzava ~ Leto, value.var = 'skupne.emisije')
+podobnosti <- right_join(podobnosti, priprava.plini, by=c('Drzava'))
+
+podobnosti.a <- podobnosti[,-1]
+fit<-hclust(dist(scale(podobnosti.a)))
+skupine2 <- cutree(fit, 7)
+
+cluster2 <- mutate(podobnosti, skupine2)
+
+zemljevid_cluster <- ggplot() + 
+  geom_polygon(data = right_join(cluster2[c(-2:-31)], europe, by=c('Drzava')), aes(x=long, y=lat, group = group, fill=factor(skupine2))) + 
+  geom_line() +
+  theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank(), panel.background = element_blank(), legend.position = 'none') + 
+  # guides(fill=guide_colorbar(title='Skupine')) + 
+  ggtitle('nekaj')
 
 #Zemljevid INDEKSA eko izdatkov/bdp 
 
 
 
-#Zemljevid INDEKSA eko izdatkov/bdp 
+
 
 
 
