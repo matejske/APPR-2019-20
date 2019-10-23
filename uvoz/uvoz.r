@@ -141,7 +141,7 @@ skupno.plini <- inner_join(metan, co.2, by = c("Drzava", "Leto", "Sector.gospoda
 skupno.plini <- inner_join(skupno.plini, no.2, by = c("Drzava", "Leto", "Sector.gospodarstva"))
 skupno.plini$skupne.emisije <- skupno.plini$Izpuscene.emisije.x + 
   skupno.plini$Izpuscene.emisije.y + skupno.plini$Izpuscene.emisije
-skupno.plini <- skupno.plini%>%filter(Sector.gospodarstva == 'Total - all NACE activities')
+skupno.plini <- skupno.plini %>% filter(Sector.gospodarstva == 'Total - all NACE activities')
 skupno.plini <- skupno.plini[, c(-(4:9), -1)]
 
 
@@ -153,8 +153,10 @@ eko.davki <- read_csv(file = 'podatki/ekoloski_davki.csv', skip = 1,
                       col_names = c("A", "Drzava", "Leto", "B", "Pobrani.davki"),
                       na = c(":", " ", "", "-"))
 
-eko.davki <- eko.davki  %>% filter(Pobrani.davki != "") %>% filter(Leto >= 1998 & Leto <= 2017) %>% 
-  filter(A == "Total environmental taxes") %>% filter(B == "Million euro") %>%
+eko.davki <- eko.davki  %>% 
+  filter(Pobrani.davki != "") %>% 
+  filter(Leto >= 1998 & Leto <= 2017) %>% 
+  filter(A == "Total environmental taxes" & B == "Million euro") %>% 
   filter(Drzava != "European Union - 28 countries" &
            Drzava != "European Union - 28 countries" &
            Drzava != "European Union - 27 countries (from 2019)" &
