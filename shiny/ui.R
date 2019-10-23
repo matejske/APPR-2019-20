@@ -2,7 +2,7 @@ library(shiny)
 
 shinyUI(fluidPage(
   
-  titlePanel(""),
+  titlePanel("Skupne vrednosti emisij v državah EU"),
   
   
   

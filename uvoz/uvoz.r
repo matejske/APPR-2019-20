@@ -207,9 +207,9 @@ ekoizdatki.v.davkih <- ekoizdatki.v.davkih[,c(-3,-4)]
 
 
 #IZVOZ TABEL=====================================================================================
-# write.csv2(bdp,'podatki/tidy_BDP.csv', fileEncoding = 'UTF-8')
-# write.csv2(populacija,'podatki/tidy_populacija.csv', fileEncoding = 'UTF-8')
-# write.csv2(dolg,'podatki/tidy_dolg.csv', fileEncoding = 'UTF-8')
-# write.csv2(eko.potrosnja,'podatki/tidy_ekoloska_potrosnja.csv', fileEncoding = 'UTF-8')
-# write.csv2(eko.davki,'podatki/tidy_ekoloski_davki.csv', fileEncoding = 'UTF-8')
-# write.csv2(emisije,'podatki/tidy_emisije.csv', fileEncoding = 'UTF-8')
+write.csv2(bdp,'podatki/tidy_BDP.csv', fileEncoding = 'UTF-8')
+write.csv2(populacija,'podatki/tidy_populacija.csv', fileEncoding = 'UTF-8')
+write.csv2(dolg,'podatki/tidy_dolg.csv', fileEncoding = 'UTF-8')
+write.csv2(eko.potrosnja,'podatki/tidy_ekoloska_potrosnja.csv', fileEncoding = 'UTF-8')
+write.csv2(eko.davki,'podatki/tidy_ekoloski_davki.csv', fileEncoding = 'UTF-8')
+write.csv2(emisije,'podatki/tidy_emisije.csv', fileEncoding = 'UTF-8')

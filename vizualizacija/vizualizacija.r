@@ -6,13 +6,14 @@ davki.slovenije <- eko.davki %>% filter(Drzava == "Slovenia")
 graf.davki.slo <- ggplot(davki.slovenije, aes(x = Leto, y = Pobrani.davki)) + 
   geom_point(colour = "red") + 
   geom_line() + 
-  theme_minimal() 
+  theme_minimal() +
+  ggtitle('Vrednosti prihodkov Slovenije s strani ekoloških davkov') + 
+  theme(plot.title = element_text(hjust = 0.5, size = 15, face = "bold"))
 plot(graf.davki.slo)
 
 
 #Uvozimo zemljevid sveta==================================================================================
-source("lib/uvozi.zemljevid.r") #Nastavi pravo datoteko
-
+source("lib/uvozi.zemljevid.r")
 svet <- uvozi.zemljevid("https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_countries.zip", 
                         "ne_50m_admin_0_countries", encoding = "utf-8") %>% fortify()
 
@@ -25,20 +26,22 @@ europe <- svet %>% filter(CONTINENT == "Europe") %>%
 
 colnames(europe)[26] <- 'Drzava'
 
+
 #Drzave v zemljevidu "europe"
 drzave <- sort(unique(europe$NAME)) 
 drzave <- as.data.frame(drzave, stringsAsFactors=FALSE) 
 names(drzave) <- "Drzava"
 
-#Zemljevid evropskih drzav v letu 2017 (obarvane glede na velikost BDP)====================================
-zemljevid.bdp.2017 <- ggplot() + 
+
+#Zemljevid evropskih drzav v letu 2016 (obarvane glede na velikost BDP)====================================
+zemljevid.bdp.2016 <- ggplot() + 
   geom_polygon(data = bdp %>% 
-                 filter(Leto == 2017) %>% 
+                 filter(Leto == 2016) %>% 
                  right_join(europe, by=c("Drzava"="NAME")), aes(x=long, y=lat, group=group, fill=BDP.E)) + 
   theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank(), 
         panel.background = element_blank()) + 
   labs(title = "Zemljevid evropskih držav", 
-       subtitle = "BDP v letu 2017") +
+       subtitle = "BDP v letu 2016") +
   theme(plot.title = element_text(hjust = 0.5, size = 15, face = "bold"),
         plot.subtitle = element_text(hjust = 0.5),
         legend.position = "right")
@@ -46,22 +49,23 @@ zemljevid.bdp.2017 <- ggplot() +
 plot(zemljevid.bdp.2017)
 
 #Zemljevid INDEKSA eko izdatkov/bdp=========================================================================
-zemljevid.izdatki.v.bdp.2017 <- ggplot() + 
+zemljevid.izdatki.v.bdp.2016 <- ggplot() + 
   geom_polygon(data = ekoizdatki.v.bdp %>% 
                  filter(Leto == 2016) %>% 
                  right_join(europe, by=c("Drzava"="NAME")), aes(x=long, y=lat, group=group, fill=ekoizdatki.v.bdp.stolpec)) + 
   theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank(), 
         panel.background = element_blank()) + 
   labs(title = "Zemljevid indeksa izdatki za ekologijo glede na BDP",
-       subtitle = "(evropske države v letu 2018)") +
+       subtitle = "(evropske države v letu 2016)") +
   theme(plot.title = element_text(hjust = 0.5, size = 15, face = "bold"),
         plot.subtitle = element_text(hjust = 0.5),
         legend.position = "right") 
 
-plot(zemljevid.izdatki.v.bdp.2017)
+plot(zemljevid.izdatki.v.bdp.2016)
 
 
 #Cluster==================================================================================================
+##Podobnosti med državami glede na letni BDP in izpuščene emisije
 podobnosti <- dcast(bdp, Drzava~Leto, value.var = 'BDP.E')
 priprava.plini <- skupno.plini %>% 
   filter(Leto > 2007) %>% 
@@ -77,12 +81,14 @@ cluster2 <- mutate(podobnosti, skupine2)
 zemljevid_cluster <- ggplot() + 
   geom_polygon(data = right_join(cluster2[c(-2:-31)], europe, by=c('Drzava')), aes(x=long, y=lat, group = group, fill=factor(skupine2))) + 
   geom_line() +
-  theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank(), panel.background = element_blank(), legend.position = 'none') + 
-  # guides(fill=guide_colorbar(title='Skupine')) + 
-  ggtitle('nekaj')
+  theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank(), panel.background = element_blank()) + 
+  #guides(fill=guide_colorbar(title='Skupine')) + 
+  ggtitle('Podobnosti med državami glede na letni BDP in izpuščene emisije') + 
+  theme(plot.title = element_text(hjust = 0.5, size = 15, face = "bold"))
+print(zemljevid_cluster)
 
 #Plotly=========================================================================================================
-#Plotly: Pobrani davki in izmerjene vrednosti emisij
+##Plotly: Pobrani davki in izmerjene vrednosti emisij
 plotly.tabela2 <- inner_join(eko.davki, skupno.plini, by = c('Drzava','Leto')) %>% 
   filter(Leto >= "2008")
 plotly.graf2 <- ggplot(data = plotly.tabela2, aes(x=Pobrani.davki, y=skupne.emisije, color=Drzava)) + 
@@ -94,9 +100,9 @@ print(plotly.graf2)
 #FUNKCIJA ZA SHINY==============================================================================================
 zemljevid.leto <- function(cifra) {
   
-  ggplot() + geom_polygon(data = bdp %>% filter(Leto == cifra) %>% 
+  ggplot() + geom_polygon(data = skupno.plini %>% filter(Leto == cifra) %>% 
                             right_join(europe, by=c("Drzava"="NAME")),
-                          aes(x = long, y = lat, group = group, fill=BDP.E)) + 
+                          aes(x = long, y = lat, group = group, fill=skupne.emisije)) + 
     xlab("") + ylab("")  + 
     theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank(), panel.background = element_blank()) + 
     scale_fill_gradient(low = '#ffb3b3', high='#660000')
