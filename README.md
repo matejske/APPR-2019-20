@@ -7,8 +7,7 @@ Repozitorij z gradivi pri predmetu APPR v študijskem letu 2019/20
 
 ## Analiza okoljske ozaveščenosti evropskih držav
 
-Analiziral bom podatke o okoljski ozaveščenosti evropskih držav. Za merilo ozaveščanosti bom izbral izdatke posamezne države za ekologijo, izmerjene vrednosti emisij treh najbolj škodljivih toplogrednih plinov in pobrane davke s strani ekoloških dajatev. Zgoraj omenjene podatke bom primerjal z BDP-jem, številom prebivalcev in konsolidiranim državnim dolgom. Analiziral bom, ali obstaja korelacija med BDP-jem na prebivalca in vrednostmi emisij, kateri sektorji gospodarstva so največji onasneževalci okolja,... Analiziral bom tudi, kako gospodarska kriza vpliva na vrednosti emisij gospodarstva in ekološke izdatke države.
-
+Analiziral bom podatke o okoljski ozaveščenosti evropskih držav. Za merilo ozaveščanosti bom izbral izdatke posamezne države za ekologijo, izmerjene vrednosti emisij treh najbolj škodljivih toplogrednih plinov in pobrane davke s strani ekoloških dajatev. Zgoraj omenjene podatke bom primerjal z BDP-jem, številom prebivalcev in konsolidiranim državnim dolgom. Analiziral bom, ali obstaja korelacija med BDP-jem na prebivalca in vrednostmi emisij, kateri sektorji gospodarstva so največji onasneževalci okolja, ...
 
 Da bom lahko opazoval povezave med temi spremenljivkami, bom podatke uredil v sledeče tabele. 
 
