@@ -12,7 +12,7 @@ Analiziral bom podatke o okoljski ozaveščenosti evropskih držav. Za merilo oz
 
 Da bom lahko opazoval povezave med temi spremenljivkami, bom podatke uredil v sledeče tabele. 
 
-Tabele: (##ALI MORAM TU IZPISAT ORIGINALNE TABELE, ALI TABELE V TIDY DATA)
+Tabele:
 * tabela 1: država, leto, BDP (v milijonih evrov)
 * tabela 2: država, leto, STEVILO PREBIVALCEV
 * tabela 3: država, leto, KONSOLIDIRANI DRZAVNI DOLG (v milijonih evrov)
