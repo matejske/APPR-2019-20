@@ -1,6 +1,6 @@
 ---
-title: "Poročilo pri predmetu Analiza podatkov s programom R"
-author: "Študent FMF"
+title: "Analiza okoljske ozaveščenosti evropskih držav"
+author: "Matej Škerlep"
 output:
   html_document: default
   pdf_document:
@@ -24,11 +24,11 @@ source("lib/libraries.r", encoding="UTF-8")
 source("lib/rstudio.r", encoding="UTF-8")
 ```
 
-# Izbira teme
+# Uvod
 
-Za vzorec bomo prikazali nekaj podatkov o slovenskih občinah.
+Analiziral sem podatke o okoljski ozaveščenosti evropskih držav. Za merilo ozaveščanosti sem izbral izdatke posamezne države za ekologijo, izmerjene vrednosti emisij treh najbolj škodljivih toplogrednih plinov in pobrane davke s strani ekoloških dajatev. Zgoraj omenjene podatke sem primerjal z BDP-jem, številom prebivalcev in konsolidiranim državnim dolgom. Analiziral sem, ali obstaja korelacija med BDP-jem na prebivalca in vrednostmi emisij, kateri sektorji gospodarstva so največji onasneževalci okolja, ... 
 
-![](slike/grb.png)
+![](slike/tovarna.jpg)
 
 ***
 
@@ -38,50 +38,86 @@ Za vzorec bomo prikazali nekaj podatkov o slovenskih občinah.
 source("uvoz/uvoz.r", encoding="UTF-8")
 ```
 
-Uvozili smo podatke o občinah v obliki CSV s statističnega urada ter v obliki HTML
-z Wikipedije. Podatke imamo v dveh razpredelnicah v obliki *tidy data*.
+Podatke sem uvozil v obliki CSV, ki sem jih pridobil v podatkovnih bazah Eurostat.
+Sprva so bili podatki v šestih tabelah, ki sem jih uredil v šest razpredelnic v obliki *tidy data*.
 
-1. `druzine` - podatki o družinah za vsako občino
-  - `obcina` - spremenljivka: ime občine (neurejen faktor),
-  - `velikost.druzine` - spremenljivka: število otrok v družini (število: 1, 2, 3 ali 4, kjer zadnja vrednost pomeni 4 ali več),
-  - `stevilo.druzin` - meritev: število družin z ustreznim številom otrok v ustrezni občini (število).
+1. `bdp` - podatki o bruto domačem proizvodu (BDP) držav Evropske unije (1998-2017)
+  - `Drzava` - - spremenljivka: imena opazovanih držav, (neurejen faktor)
+  - `Leto` - spremenljivka: leto testiranja, (število)
+  - `BDP.E` - meritev: BDP v tekočih cenah v milijonih evrov, (število)
+  
+2. `emisije` - letne meritve  treh najškodljivejših toplogrednih plinov v ozračju po sektorjih gospodarstva 
+  - `Drzava` - spremenljivka: imena opazovanih držav, (neurejen faktor)
+  - `Leto` - spremenljivka: leto testiranja, (število)
+  - `Merjen.plin` - spremelnjivka: vrsta plina (Carbon dioxide, Carbon dioxide, Nitrous oxide), (neurejen faktor)
+  - `Sector.gospodarstva` - spremenljivka: sektor gospodarstva, ki je v zrak izpustil določeno količino plina, (neurejen faktor)
+  - `Izpuscene.emisije` - meritev: letna izmerjena količina v tonah, (število)
 
-2. `obcine` - podatki o občinah
-  - `obcina` - spremenljivka: ime občine (neurejen faktor),
-  - `povrsina` - meritev: površina občine v km$^2$ (število),
-  - `prebivalci` - meritev: prebivalstvo občine (število),
-  - `gostota` - meritev: število prebivalcev na km$^2$ (število),
-  - `naselja` - meritev: število naselij v občini (število),
-  - `ustanovitev` - meritev: leto ustanovitve občine (število),
-  - `pokrajina` - meritev: pokrajina, ki ji občina pripada (neurejen faktor),
-  - `regija` - meritev: regija, ki ji občina pripada (neurejen faktor),
-  - `odcepitev` - meritev: podatki o občinah, od katerih se je občina odcepila (besedilo).
+3. `dolg` - konsolidirani državni dolg Konsolidirani državni dolg (1998-2017)
+  - `Drzava` - spremenljivka: imena opazovanih držav, (neurejen faktor)
+  - `Leto` - spremenljivka: leto testiranja, (število)
+  - `Dolg` - meritev: vrednost dolga v milijonih evrov, (število)
 
-**Opomba**: da bi razpredelnica `obcine` res bila v obliki *tidy data*, bi morali odstraniti stolpec `gostota` (saj je izpeljan iz stolpcev `povrsina` in `prebivalci`), podatke o pokrajinah pa bi morali premakniti v drugo razpredelnico, saj nekatere občine pripadajo dvema pokrajinama. Podobno bi morali narediti tudi s stolpcem `odcepitev`.
+4. `eko.potrosnja` - letni državni izdatki za ekologijo (1998-2017)
+  - `Drzava` - spremenljivka: imena opazovanih držav, (neurejen faktor)
+  - `Leto` - spremenljivka: leto testiranja, (število)
+  - `Izdatki.za.ekologijio` - meritev: izdatki (potrošnja) držav za ekologijo v milijonih evrov, (število)
+  
+5. `populacija` - število prebivalcev držav Evropske unije (1998-2017)
+  - `Drzava` - spremenljivka: imena opazovanih držav, (neurejen faktor)
+  - `Leto` - spremenljivka: leto testiranja, (število)
+  - `Stevilo.prebivalcev` - meritev: število prebivalcev, (število)
 
-Spodnji graf prikazuje porazdelitev števila naselij v občinah.
+6. `eko.davki` - letni državni prihodki s strani ekoloških davkov za podjetja in posameznike
+  - `Drzava` - spremenljivka: imena opazovanih držav, (neurejen faktor)
+  - `Leto` - spremenljivka: leto testiranja, (število)
+  - `Pobrani.davki` - meritev: vrednost pobranih ekoloških davkov v milijonih evrov, (število)
 
-```{r histogram, echo=FALSE, message=FALSE, fig.align='center', fig.cap='Histogram števila naselij v občinah'}
-ggplot(obcine, aes(x=naselja)) + geom_histogram() +
-  ggtitle("Pogostost števila naselij") + xlab("Število naselij") + ylab("Število občin")
+
+
+## Tu spodaj bom izrisal uvodne grafe:
+
+```{r vizualizacija, echo=FALSE, message=FALSE, results='hide', warning=FALSE}
+source('vizualizacija/vizualizacija.r', encoding = 'UTF-8')
 ```
+
+
+### Uvodni tekst
+```{r graf.emisije.slo, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=7, fig.cap='Caption'}
+plot(graf.emisije.slo)
+```
+
+```{r graf.davki.slo, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=7, fig.cap='CAption'}
+plot(graf.davki.slo)
+```
+
+
+
+
 
 ***
 
 # Analiza in vizualizacija podatkov
 
-```{r vizualizacija, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
-source("vizualizacija/vizualizacija.r", encoding="UTF-8")
+```{r zemljevid.bdp.2016, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=7, fig.cap='CAption'}
+plot(zemljevid.bdp.2016)
 ```
 
-Spodnji zemljevid prikazuje povprečno velikost družine za vsako občino.
-
-```{r zemljevid, echo=FALSE, fig.align='center', fig.cap='Zemljevid povprečnega števila otrok v družini'}
-ggplot() + geom_polygon(data=left_join(zemljevid, povprecja, by=c("OB_UIME"="obcina")),
-                        aes(x=long, y=lat, group=group, fill=povprecje)) +
-  ggtitle("Povprečno število otrok v družini") + xlab("") + ylab("") +
-  guides(fill=guide_colorbar(title="Povprečje"))
+```{r zemljevid.izdatki.v.bdp.2016, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=7, fig.cap='CAption'}
+plot(zemljevid.izdatki.v.bdp.2016)
 ```
+
+## Spodnjega plotlyja mi ne izriše
+```{r plotly.graf2, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=7, fig.cap='CAption'}
+print(plotly.graf2)
+```
+
+```{r zemljevid_cluster, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=7, fig.cap='CAption'}
+plot(zemljevid_cluster)
+```
+
+
+
 
 ***
 
@@ -91,19 +127,16 @@ ggplot() + geom_polygon(data=left_join(zemljevid, povprecja, by=c("OB_UIME"="obc
 source("analiza/analiza.r", encoding="UTF-8")
 ```
 
-Spodnji graf prikazuje povezavo med številom naselij in površino občine.
+```{r graf.napovedi.praga.slo, echo=FALSE, fig.align='center', fig.cap='Caption'}
+plot(graf.napovedi.praga.slo)
+```
 
-```{r graf, echo=FALSE, fig.align='center', fig.cap='Povezava med številom naselij in površino občine'}
-ggplot(inner_join(obcine, data.frame(obcina=names(skupine),
-                                     skupina=factor(skupine)), by="obcina")
-, aes(x=povrsina, y=naselja, color=skupina, size=prebivalci/1000)) + geom_point() +
-  ggtitle("Število naselij glede na površino občine") +
-  xlab(expression("Površina (km"^2 * ")")) + ylab("Št. naselij") +
-  guides(color=guide_legend(title="Skupina"),
-         size=guide_legend(title="Prebivalci (* 1000)"))
+```{r graf.napovedi.praga.nem, echo=FALSE, fig.align='center', fig.cap='Caption'}
+plot(graf.napovedi.praga.nem)
 ```
 
 ***
+# Shiny
 
 ```{r shiny, echo=FALSE}
 shinyAppDir("shiny", options=list(width="100%", height=600))

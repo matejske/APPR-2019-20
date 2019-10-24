@@ -1,18 +1,35 @@
 #=========================================================================================================
-#Graf ekodavkov Slovenije v letih 1998 - 2018=============================================================
+#Graf skupnih emisij v Sloveniji v letih 2008-2017
+emisije.slo <- skupno.plini %>% 
+  filter(Drzava == "Slovenia" & Leto >= 2008) %>%
+  transform(skupne.emisije = round(skupne.emisije / 1000000, 4))
+
+graf.emisije.slo <- ggplot(emisije.slo, aes(x = Leto, y = skupne.emisije)) + 
+  geom_line(colour = "royalblue", size = 1.5) +
+  geom_point(colour = "#000000", size = 2.5) + 
+  theme_minimal() +
+  ggtitle('Vrednosti letnih emisij Slovenije \n(seštevek panog v letih 1998-2018)') + 
+  ylab("Vrednosti emisij v megatonah") +
+  theme(plot.title = element_text(hjust = 0.5, size = 15, face = "bold")) + 
+  scale_x_continuous("Leto", labels = as.character(emisije.slo$Leto), breaks = emisije.slo$Leto)
+# plot(graf.emisije.slo)
+
+
+#Graf ekodavkov Slovenije v letih 1998-2018=============================================================
 davki.slovenije <- eko.davki %>% filter(Drzava == "Slovenia")
+
 graf.davki.slo <- ggplot(davki.slovenije, aes(x = Leto, y = Pobrani.davki)) + 
-  geom_point(colour = "red") + 
-  geom_line() + 
+  geom_line(colour = "royalblue", size = 1.5) +
+  geom_point(colour = "#000000", size = 2.5) + 
   theme_minimal() +
   ggtitle('Prihodki Slovenije s strani ekoloških davkov \n(1998-2018)') + 
-  xlab("Leto") + 
   ylab("Pobrani davki v milijonih €") +
-  theme(plot.title = element_text(hjust = 0.5, size = 15, face = "bold"))
-plot(graf.davki.slo)
+  theme(plot.title = element_text(hjust = 0.5, size = 15, face = "bold")) + 
+  scale_x_continuous("Leto", labels = as.character(davki.slovenije$Leto), breaks = davki.slovenije$Leto)
+# plot(graf.davki.slo)
 
 
-#Uvozimo zemljevid sveta==================================================================================
+# Uvozimo zemljevid sveta==================================================================================
 source("lib/uvozi.zemljevid.r")
 svet <- uvozi.zemljevid("https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_countries.zip", 
                         "ne_50m_admin_0_countries", encoding = "utf-8") %>% fortify()
@@ -48,12 +65,11 @@ zemljevid.bdp.2016 <- ggplot() +
         plot.subtitle = element_text(hjust = 0.5),
         legend.position = "right")
 
-plot(zemljevid.bdp.2016)
+# plot(zemljevid.bdp.2016)
 
-#transform(bdp.pc, bdp.pc.stolpec = round(((bdp.pc$BDP.E/bdp.pc$Stevilo.prebivalcev)*
-#1000000), digits = 2))
 
-#Zemljevid INDEKSA eko izdatkov/bdp=========================================================================
+
+#Zemljevid INDEKSA eko izdatkov glede na bdp================================================================
 zemljevid.izdatki.v.bdp.2016 <- ggplot() + 
   geom_polygon(data = ekoizdatki.v.bdp %>% 
                  filter(Leto == 2016) %>% 
@@ -65,9 +81,10 @@ zemljevid.izdatki.v.bdp.2016 <- ggplot() +
   guides(fill=guide_colorbar("Vrednost \nindeksa")) +
   theme(plot.title = element_text(hjust = 0.5, size = 15, face = "bold"),
         plot.subtitle = element_text(hjust = 0.5),
-        legend.position = "right") 
+        legend.position = "right") +
+  scale_fill_gradient(high = "#B2FF66", low="#193300")
 
-plot(zemljevid.izdatki.v.bdp.2016)
+# plot(zemljevid.izdatki.v.bdp.2016)
 
 
 #Cluster==================================================================================================
@@ -89,9 +106,9 @@ zemljevid_cluster <- ggplot() +
   geom_line() +
   theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank(), panel.background = element_blank()) + 
   guides(fill=guide_legend(title='Skupine')) + 
-  ggtitle('Podobnosti med državami glede na letni BDP in izpuščene emisije') + 
+  ggtitle('Podobnosti med državami glede na letni BDP \nin izpuščene emisije') + 
   theme(plot.title = element_text(hjust = 0.5, size = 15, face = "bold"))
-print(zemljevid_cluster)
+# print(zemljevid_cluster)
 
 #Plotly=========================================================================================================
 ##Plotly: Pobrani davki in izmerjene vrednosti emisij
@@ -109,20 +126,19 @@ plotly.graf2 <- ggplot(data = plotly.tabela, aes(x=Pobrani.davki, y=skupne.emisi
   ggtitle('Podobnosti med državami glede na letni BDP in izpuščene emisije')
   theme(plot.title = element_text(color="red", size=14, face="bold.italic"))
 plotly.graf2 <- ggplotly(plotly.graf2, dynamicTics=TRUE)
-print(plotly.graf2)
+# print(plotly.graf2)
 
 
 #FUNKCIJA ZA SHINY==============================================================================================
 zemljevid.leto <- function(cifra) {
   
-  ggplot() + geom_polygon(data = skupno.plini %>% 
-                            filter(Leto == cifra) %>% 
-                            transform(skupne.emisije = skupno.plini$skupne.emisije / 1000000) %>%
+  ggplot() + geom_polygon(data = skupne.emisije.pc %>% 
+                            filter(Leto == cifra) %>%
                             right_join(europe, by=c("Drzava"="NAME")),
-                          aes(x = long, y = lat, group = group, fill=skupne.emisije)) + 
+                          aes(x = long, y = lat, group = group, fill=Emisije.na.prebivalca)) + 
     xlab("") + ylab("")  + 
-    guides(fill=guide_colorbar("Vrednost emisij v megatonah")) +
+    guides(fill=guide_colorbar("Vrednost emisij \nv tonah na prebivalca")) +
     theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank(), panel.background = element_blank()) + 
-    scale_fill_gradient(low = '#ffb3b3', high='#660000')
+    scale_fill_gradient(low = "#32CD32", high="#8b4513")
   
 }

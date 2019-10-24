@@ -16,7 +16,7 @@ graf.napovedi.praga.slo <- ggplot(eko.potrosnja.slovenija, aes(x=Leto, y=Izdatki
   xlab("Leto") + 
   ylab("Izdatki za ekologijo v milijonih €")
 
-plot(graf.napovedi.praga.slo)
+# plot(graf.napovedi.praga.slo)
 
 
 ##Napoved ekoloških izdatkov Nemčije v prihodnjih letih =======================================
@@ -38,4 +38,4 @@ graf.napovedi.praga.nem <- ggplot(eko.potrosnja.nemcija, aes(x=Leto, y=Izdatki.z
   xlab("Leto") + 
   ylab("Izdatki za ekologijo v milijardah €")
 
-plot(graf.napovedi.praga.nem)
+# plot(graf.napovedi.praga.nem)

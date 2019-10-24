@@ -22,88 +22,7 @@ bdp$BDP.E <- as.numeric(bdp$BDP.E)
 
 
 
-#2. TABELA: ŠTEVILO PREBIVALCEV (1960-2018)==========================================================================
-populacija <- read_csv('podatki/populacija.csv', skip = 1,
-                       locale=locale(grouping_mark=".", encoding="Windows-1250"),
-                       col_names = c("A", "Drzava", "Leto", "B", "C", "Stevilo.prebivalcev"),
-                       na = c(":", " ", "", "-"))
-populacija <- populacija %>% filter(B == "Total")
-
-populacija <- populacija [, c(-1, -4, -5)]
-populacija <- populacija  %>% 
-  filter(Stevilo.prebivalcev != "") %>% 
-  filter(Leto >= 1998 & Leto <= 2017) %>% 
-  filter(Drzava != "European Union - 28 countries" &
-           Drzava != "European Union - 28 countries" &
-           Drzava != "European Union - 27 countries (from 2019)" &
-           Drzava != "European Union - 27 countries (2007-2013)" &
-           Drzava != "European Union - 15 countries (1995-2004)" &
-           Drzava != "Euro area (EA11-2000, EA12-2006, EA13-2007, EA15-2008, EA16-2010, EA17-2013, EA18-2014, EA19)" &
-           Drzava != "Euro area (19 countries)" &
-           Drzava != "Euro area (18 countries)" &
-           Drzava != "Euro area (12 countries)")
-
-populacija$Drzava <- gsub('^Germany.*', 'Germany', populacija$Drzava)
-populacija$Drzava <- gsub('^France.*', 'France', populacija$Drzava)
-populacija$Stevilo.prebivalcev <- as.numeric(populacija$Stevilo.prebivalcev)
-
-
-
-#3. TABELA: Konsolidirani državni dolg (v milijonih evrov) (1995-2018)================================================
-dolg <- read_csv(file = 'podatki/dolg.csv', skip = 1,
-                 locale=locale(grouping_mark=".", encoding="Windows-1250"),
-                 col_names = c("A", "Drzava", "Leto", "B", "C", "Dolg"),
-                 na = c(":", " ", "", "-"))
-
-dolg <- dolg [, c(-1, -4, -5)]
-dolg <- dolg  %>% 
-  filter(Dolg != "") %>% 
-  filter(Leto >= 1998 & Leto <= 2017) %>% 
-  filter(Drzava != "European Union - 28 countries" &
-           Drzava != "European Union - 28 countries" &
-           Drzava != "European Union - 27 countries (from 2019)" &
-           Drzava != "European Union - 27 countries (2007-2013)" &
-           Drzava != "European Union - 25 countries (2004-2006)" &
-           Drzava != "European Union - 15 countries (1995-2004)" &
-           Drzava != "Euro area (EA11-2000, EA12-2006, EA13-2007, EA15-2008, EA16-2010, EA17-2013, EA18-2014, EA19)" &
-           Drzava != "Euro area (19 countries)" &
-           Drzava != "Euro area (18 countries)" &
-           Drzava != "Euro area (17 countries)" & 
-           Drzava != "Euro area (12 countries)")
-
-dolg$Drzava <- gsub('^Germany.*', 'Germany', dolg$Drzava)
-dolg$Dolg <- as.numeric(dolg$Dolg)
-
-
-#4. TABELA: Izdatki držav za ekologijo (v milijonih evrov) (2006-2018)================================================
-eko.potrosnja <- read_csv(file = 'podatki/ekoloska_potrosnja.csv', skip = 1,
-                          locale=locale(grouping_mark=".", encoding="Windows-1250"),
-                          col_names = c("A", "Drzava", "Leto", "B", "Izdatki.za.ekologijio"),
-                          na = c(":", " ", "", "-"))
-
-eko.potrosnja <- eko.potrosnja[, c(-1, -4)]
-eko.potrosnja <- eko.potrosnja  %>% 
-  filter(Izdatki.za.ekologijio != "") %>% 
-  filter(Leto >= 1998 & Leto <= 2017) %>% 
-  filter(Drzava != "European Union - 28 countries" &
-           Drzava != "European Union - 28 countries" &
-           Drzava != "European Union - 27 countries (from 2019)" &
-           Drzava != "European Union - 27 countries (2007-2013)" &
-           Drzava != "European Union - 25 countries (2004-2006)" &
-           Drzava != "European Union - 15 countries (1995-2004)" &
-           Drzava != "Euro area (EA11-2000, EA12-2006, EA13-2007, EA15-2008, EA16-2010, EA17-2013, EA18-2014, EA19)" &
-           Drzava != "Euro area (19 countries)" &
-           Drzava != "Euro area (18 countries)" &
-           Drzava != "Euro area (17 countries)" & 
-           Drzava != "Euro area (12 countries)")
-
-eko.potrosnja$Drzava <- gsub('^Germany.*', 'Germany', eko.potrosnja$Drzava)
-eko.potrosnja$Izdatki.za.ekologijio <- as.numeric(eko.potrosnja$Izdatki.za.ekologijio)
-
-
-
-
-#5. TABELA: Izmerjene vrednosti emisij (v tonah) (1995-2017)==========================================================
+#2. TABELA: Izmerjene vrednosti emisij (v tonah) (1995-2017)==========================================================
 emisije <- read_csv('podatki/emisije.csv', na=c(":", " ", "", "-"), skip=1,
                     locale=locale(grouping_mark=" ", encoding="Windows-1250"),
                     col_names=c("Enota", "Drzava", "Leto", "Merjen.plin",
@@ -147,6 +66,92 @@ skupno.plini <- skupno.plini[, c(-(4:9), -1)]
 
 
 
+#3. TABELA: Konsolidirani državni dolg (v milijonih evrov) (1995-2018)================================================
+dolg <- read_csv(file = 'podatki/dolg.csv', skip = 1,
+                 locale=locale(grouping_mark=".", encoding="Windows-1250"),
+                 col_names = c("A", "Drzava", "Leto", "B", "C", "Dolg"),
+                 na = c(":", " ", "", "-"))
+
+dolg <- dolg [, c(-1, -4, -5)]
+dolg <- dolg  %>% 
+  filter(Dolg != "") %>% 
+  filter(Leto >= 1998 & Leto <= 2017) %>% 
+  filter(Drzava != "European Union - 28 countries" &
+           Drzava != "European Union - 28 countries" &
+           Drzava != "European Union - 27 countries (from 2019)" &
+           Drzava != "European Union - 27 countries (2007-2013)" &
+           Drzava != "European Union - 25 countries (2004-2006)" &
+           Drzava != "European Union - 15 countries (1995-2004)" &
+           Drzava != "Euro area (EA11-2000, EA12-2006, EA13-2007, EA15-2008, EA16-2010, EA17-2013, EA18-2014, EA19)" &
+           Drzava != "Euro area (19 countries)" &
+           Drzava != "Euro area (18 countries)" &
+           Drzava != "Euro area (17 countries)" & 
+           Drzava != "Euro area (12 countries)")
+
+dolg$Drzava <- gsub('^Germany.*', 'Germany', dolg$Drzava)
+dolg$Dolg <- as.numeric(dolg$Dolg)
+
+
+
+
+
+#4. TABELA: Izdatki držav za ekologijo (v milijonih evrov) (2006-2018)================================================
+eko.potrosnja <- read_csv(file = 'podatki/ekoloska_potrosnja.csv', skip = 1,
+                          locale=locale(grouping_mark=".", encoding="Windows-1250"),
+                          col_names = c("A", "Drzava", "Leto", "B", "Izdatki.za.ekologijio"),
+                          na = c(":", " ", "", "-"))
+
+eko.potrosnja <- eko.potrosnja[, c(-1, -4)]
+eko.potrosnja <- eko.potrosnja  %>% 
+  filter(Izdatki.za.ekologijio != "") %>% 
+  filter(Leto >= 1998 & Leto <= 2017) %>% 
+  filter(Drzava != "European Union - 28 countries" &
+           Drzava != "European Union - 28 countries" &
+           Drzava != "European Union - 27 countries (from 2019)" &
+           Drzava != "European Union - 27 countries (2007-2013)" &
+           Drzava != "European Union - 25 countries (2004-2006)" &
+           Drzava != "European Union - 15 countries (1995-2004)" &
+           Drzava != "Euro area (EA11-2000, EA12-2006, EA13-2007, EA15-2008, EA16-2010, EA17-2013, EA18-2014, EA19)" &
+           Drzava != "Euro area (19 countries)" &
+           Drzava != "Euro area (18 countries)" &
+           Drzava != "Euro area (17 countries)" & 
+           Drzava != "Euro area (12 countries)")
+
+eko.potrosnja$Drzava <- gsub('^Germany.*', 'Germany', eko.potrosnja$Drzava)
+eko.potrosnja$Izdatki.za.ekologijio <- as.numeric(eko.potrosnja$Izdatki.za.ekologijio)
+
+
+
+
+
+#5. TABELA: ŠTEVILO PREBIVALCEV (1960-2018)==========================================================================
+populacija <- read_csv('podatki/populacija.csv', skip = 1,
+                       locale=locale(grouping_mark=".", encoding="Windows-1250"),
+                       col_names = c("A", "Drzava", "Leto", "B", "C", "Stevilo.prebivalcev"),
+                       na = c(":", " ", "", "-"))
+populacija <- populacija %>% filter(B == "Total")
+
+populacija <- populacija [, c(-1, -4, -5)]
+populacija <- populacija  %>% 
+  filter(Stevilo.prebivalcev != "") %>% 
+  filter(Leto >= 1998 & Leto <= 2017) %>% 
+  filter(Drzava != "European Union - 28 countries" &
+           Drzava != "European Union - 28 countries" &
+           Drzava != "European Union - 27 countries (from 2019)" &
+           Drzava != "European Union - 27 countries (2007-2013)" &
+           Drzava != "European Union - 15 countries (1995-2004)" &
+           Drzava != "Euro area (EA11-2000, EA12-2006, EA13-2007, EA15-2008, EA16-2010, EA17-2013, EA18-2014, EA19)" &
+           Drzava != "Euro area (19 countries)" &
+           Drzava != "Euro area (18 countries)" &
+           Drzava != "Euro area (12 countries)")
+
+populacija$Drzava <- gsub('^Germany.*', 'Germany', populacija$Drzava)
+populacija$Drzava <- gsub('^France.*', 'France', populacija$Drzava)
+populacija$Stevilo.prebivalcev <- as.numeric(populacija$Stevilo.prebivalcev)
+
+
+
+
 #6. TABELA: Pobrani davki s strani ekoloških dajatev (v miljonih evrov) (1995-2017)===================================
 eko.davki <- read_csv(file = 'podatki/ekoloski_davki.csv', skip = 1,
                       locale=locale(grouping_mark=".", encoding="Windows-1250"),
@@ -180,14 +185,20 @@ eko.davki$Pobrani.davki <- as.numeric(eko.davki$Pobrani.davki)
 bdp.pc <- inner_join(bdp, populacija, by=c("Drzava", "Leto"))
 bdp.pc <- transform(bdp.pc, bdp.pc.stolpec = round(((bdp.pc$BDP.E/bdp.pc$Stevilo.prebivalcev)*
                                                       1000000), digits = 2))
-bdp.pc <- bdp.pc[,c(-3,-4)]
+bdp.pc <- bdp.pc[,c(-3, -4)]
 
 
 #DOLG V BDP
 dolg.v.bdp <- inner_join(bdp, dolg, by=c("Drzava", "Leto"))
 dolg.v.bdp <- transform(dolg.v.bdp, dolg.v.bdp.stolpec = 1 - 
                           round((dolg.v.bdp$Dolg/dolg.v.bdp$BDP.E), digits = 4))
-dolg.v.bdp <- dolg.v.bdp[,c(-3,-4)]
+dolg.v.bdp <- dolg.v.bdp[,c(-3, -4)]
+
+
+#EMISIJE NA PREBIVALCA (v tonah na prebivalca)
+skupne.emisije.pc <- inner_join(skupno.plini, populacija, by=c("Drzava", "Leto"))
+skupne.emisije.pc <- transform(skupne.emisije.pc, Emisije.na.prebivalca = skupne.emisije.pc$skupne.emisije/skupne.emisije.pc$Stevilo.prebivalcev)
+skupne.emisije.pc <- skupne.emisije.pc[,c(-3, -4)]
 
 
 #IZDATKI ZA EKOLOGIJO V BDP
@@ -208,10 +219,11 @@ ekoizdatki.v.davkih <- ekoizdatki.v.davkih[,c(-3,-4)]
 
 
 
-#IZVOZ TABEL=====================================================================================
+#IZVOZ TABEL (Tidy Data)=====================================================================================
 write.csv2(bdp,'podatki/tidy_BDP.csv', fileEncoding = 'UTF-8')
 write.csv2(populacija,'podatki/tidy_populacija.csv', fileEncoding = 'UTF-8')
 write.csv2(dolg,'podatki/tidy_dolg.csv', fileEncoding = 'UTF-8')
 write.csv2(eko.potrosnja,'podatki/tidy_ekoloska_potrosnja.csv', fileEncoding = 'UTF-8')
 write.csv2(eko.davki,'podatki/tidy_ekoloski_davki.csv', fileEncoding = 'UTF-8')
 write.csv2(emisije,'podatki/tidy_emisije.csv', fileEncoding = 'UTF-8')
+
