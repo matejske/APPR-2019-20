@@ -9,7 +9,6 @@ output:
     latex_engine: xelatex
 runtime: shiny
 ---
-![](slike/RStudio.png)
 
 ```{r setup, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
 # Če želimo nastaviti pisave v PDF-ju, odkomentiramo
@@ -24,8 +23,6 @@ source("lib/libraries.r", encoding="UTF-8")
 # Izris povezave do RStudia na Binderju
 source("lib/rstudio.r", encoding="UTF-8")
 ```
-
-
 
 # 1. Uvod
 
@@ -102,14 +99,14 @@ plot(graf.davki.slo)
 ## 3.2. Primerjava Slovenije z državami EU
 Zavedajoč se, da so toplogredni plini globalen problem, je na tem mestu primerna primerjava izpustov Slovenije z ostalimi državami Evropske unije. Sprva je tu zemljevid Evrope, ki prikazuje bruto domači proizvod (BDP) držav EU v letu 2017. Med države z najnižjim BDP-jem uvrščamo Črno Goro, Lihtenštajn, Kosovo; med tiste z najvišjim pa Nemčijo, Združeno kraljestvo, Francijo in Italijo.
 
-```{r zemljevid.bdp.2017, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=7}
+```{r zemljevid.bdp.2017, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=6.5}
 plot(zemljevid.bdp.2017)
 ```
 
 Seveda zgolj skupna količina izpustov ni primerljiv podatek, zato sem se odločil primerjati države glede na kazalnik: skupna vrednost emisij / BDP.
 Kazalnik Slovenije znaša 282,3916 ton na milijon evrov BDP, kar jo uvršča rahlo pod evropsko povprečje. Iz povprečja močno izstopajo Bolgarija, Estonija in Poljska, medtem ko je, glede na ta kazalnik najbolj ekološka država Švedska.
 
-```{r graf.emisije.v.bdp.2017, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=6}
+```{r graf.emisije.v.bdp.2017, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=7, fig.width=8}
 plot(graf.emisije.v.bdp.2017)
 ```
 
@@ -117,7 +114,7 @@ Pomemben pokazatelj ekološke ozaveščenosti držav je tudi znesek, ki ga posam
 Najbolj v negativnem smislu izstopa Irska, med tiste z najvišji indeksi pa se uvrščajo Belgija, Avstrija in zanimivo tudi Češka, ki je bila na visokem četrtem mestu po izpustu emisij. Visok koeficient izdatkov v BDP-ju Češke je torej razumljiv in obeta zmanjšanje onesnaževanja v prihodnjih letih.
 
 
-```{r zemljevid.izdatki.v.bdp.2016, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=7}
+```{r zemljevid.izdatki.v.bdp.2016, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=6.5}
 plot(zemljevid.izdatki.v.bdp.2016)
 ```
 
@@ -131,7 +128,7 @@ plotly.graf2
 ## 3.4. Podobnosti med državami glede na BDP in izpuščene emisije
 Zanimalo me je katere države so si med seboj podobne glede na izpuščene emisije in BDP. Zato sem jih na grupiral v pet skupin, kar je lepo razvidno na spodnjem zemljevidu. Opazimo lahko, da ponovno izstopa Nemčija, kateri glede na analizirane podatke ni podobne države. Največjo skupino sestavljajo države označene z roza barvo (jugovzhodna Evropa in Skandinavija).
 
-```{r zemljevid.cluster, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=7}
+```{r zemljevid.cluster, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=6.5}
 print(zemljevid.cluster)
 ```
 
