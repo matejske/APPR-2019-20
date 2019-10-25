@@ -68,21 +68,22 @@ names(drzave) <- "Drzava"
 
 
 #Zemljevid evropskih drzav v letu 2017 (obarvane glede na velikost BDP)====================================
-zemljevid.bdp.2016 <- ggplot() + 
+zemljevid.bdp.2017 <- ggplot() + 
   geom_polygon(data = bdp %>% 
                  filter(Leto == 2017) %>% 
-                 transform(BDP.E = bdp$BDP.E/1000) %>%
+                 transform(BDP.E = BDP.E / 1000000) %>%
                  right_join(europe, by=c("Drzava"="NAME")), aes(x=long, y=lat, group=group, fill=BDP.E)) + 
   theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank(), 
         panel.background = element_blank()) + 
+  scale_fill_gradient(high = "#001933", low="#cce5ff") +
   labs(title = "Zemljevid držav EU", 
        subtitle = "BDP v letu 2017") +
-  guides(fill=guide_colorbar("BDP v \nmilijardah €")) +
+  guides(fill=guide_colorbar("BDP v \nbilijonih €")) +
   theme(plot.title = element_text(hjust = 0.5, size = 15, face = "bold"),
         plot.subtitle = element_text(hjust = 0.5),
         legend.position = "right")
 
-# plot(zemljevid.bdp.2016)
+# plot(zemljevid.bdp.2017)
 
 
 
@@ -114,7 +115,7 @@ podobnosti <- right_join(podobnosti, priprava.plini, by=c('Drzava'))
 
 podobnosti.a <- podobnosti[,-1]
 fit <- hclust(dist(scale(podobnosti.a)))
-skupine2 <- cutree(fit, 7)
+skupine2 <- cutree(fit, 5)
 
 cluster2 <- mutate(podobnosti, skupine2)
 
@@ -125,15 +126,15 @@ zemljevid_cluster <- ggplot() +
   guides(fill=guide_legend(title='Skupine')) + 
   ggtitle('Podobnosti med državami glede na letni BDP \nin izpuščene emisije') + 
   theme(plot.title = element_text(hjust = 0.5, size = 15, face = "bold"))
-# print(zemljevid_cluster)
+#print(zemljevid_cluster)
 
 #Plotly=========================================================================================================
 ##Plotly: Pobrani davki in izmerjene vrednosti emisij
 plotly.tabela <- inner_join(eko.davki, skupno.plini, by = c('Drzava','Leto'))
 plotly.tabela <- plotly.tabela %>% 
   filter(Leto >= "2008") %>%
-  transform(skupne.emisije = plotly.tabela$skupne.emisije / 1000000) %>%
-  transform(Pobrani.davki = plotly.tabela$Pobrani.davki / 1000)
+  transform(skupne.emisije = skupne.emisije / 1000000) %>%
+  transform(Pobrani.davki = Pobrani.davki / 1000)
 plotly.graf2 <- ggplot(data = plotly.tabela, aes(x=Pobrani.davki, y=skupne.emisije, color=Drzava)) +
   geom_point(aes(frame=Leto, ids=Drzava)) + 
   scale_x_continuous() +

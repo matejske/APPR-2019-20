@@ -100,35 +100,34 @@ plot(graf.davki.slo)
 ```
 
 ## Primerjava Slovenije z državami Evropske unije
-Zavedajoč se, da so toplogredni plini globalen problem, je na tem mestu primerna primerjava izpustov Slovenije z ostalimi državami Evropske unije. Seveda zgolj skupna količina izpustov ni primerljiv podatek, zato sem se odločil primerjati države glede na indeks skupne vrednosti emisij v na BDP.
+Zavedajoč se, da so toplogredni plini globalen problem, je na tem mestu primerna primerjava izpustov Slovenije z ostalimi državami Evropske unije. Sprva je tu zemljevid Evrope, ki prikazuje bruto domači proizvod (BDP) držav EU v letu 2017. Med države z najnižjim BDP-jem uvrščamo Črno Goro, Lihtenštajn, Kosovo; med tiste z najvišjim pa Nemčijo, Združeno kraljestvo, Francijo in Italijo.
 
-Sprva je tu zemljevid Evrope, ki prikazuje bruto domači proizvod (BDP) držav EU v letu 2017. Med države z najnižjim BDP-jem uvrščamo Črno Goro, Lihtenštajn, Kosovo; med tiste z najvišjim pa 
+```{r zemljevid.bdp.2017, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=7}
+plot(zemljevid.bdp.2017)
+```
 
-
-
-
-Indeks Slovenije znaša 282,3916 ton na milijon evrov BDP, kar jo uvršča v okolico evropskega povprečja. Močno izstopajo Bulgarija, Estonija in Poljska, medtem ko je, glede na ta kazalnik najbolj ekološka država Švedska.
+Seveda zgolj skupna količina izpustov ni primerljiv podatek, zato sem se odločil primerjati države glede na kazalnik: skupna vrednost emisij / BDP.
+Kazalnik Slovenije znaša 282,3916 ton na milijon evrov BDP, kar jo uvršča rahlo pod evropsko povprečje. Iz povprečja močno izstopajo Bulgarija, Estonija in Poljska, medtem ko je, glede na ta kazalnik najbolj ekološka država Švedska.
 
 ```{r graf.emisije.v.bdp.2017, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=6}
 plot(graf.emisije.v.bdp.2017)
 ```
 
+Pomemben pokazatelj ekološke ozaveščenosti držav je tudi znesek, ki ga posamezna država nameni za ekologijo (t.i. ekološki izdatki). Tu so vštete razne subvencije za nakup električnih avtomobilov, energetske sanacije stavb, subvencije podjetjem za izboljšanje proizvodnje in davčne olajšave podjetjem v primeru izpolnjevanja ekoloških standardov. Podobno kot zgoraj nam sam podatek on neto izdatkih ne pove prav dosti, zato sem ponovno izračunal indeks izdatkov za ekologijo glede na BDP.
+Najbolj v negativnem smislu izstopa Irska, med tiste z najvišji indeksi pa se uvrščajo Belgija, Avstrija in zanimivo tudi Češka, ki je bila na visokem četrtem mestu po izpustu emisij. Visok koeficient izdatkov v BDP-ju Češke je torej razumljiv in obeta zmanjšanje onesnaževanja v prihodnjih letih.
 
 
-```{r zemljevid.bdp.2016, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=7, fig.cap='CAption'}
-plot(zemljevid.bdp.2016)
-```
-
-```{r zemljevid.izdatki.v.bdp.2016, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=7, fig.cap='CAption'}
+```{r zemljevid.izdatki.v.bdp.2016, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=7}
 plot(zemljevid.izdatki.v.bdp.2016)
 ```
 
-Plotly:
-```{r plotly.graf2, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=7, fig.cap='CAption'}
+## Korelacija med ekološkimi davki in vrednostjo emisij skozi leta (Plotly):
+Spodnji interaktivni diagram prikazuje spreminjanje 
+```{r plotly.graf2, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=7}
 plotly.graf2
 ```
 
-```{r zemljevid_cluster, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=7, fig.cap='CAption'}
+```{r zemljevid_cluster, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=7}
 plot(zemljevid_cluster)
 ```
 
@@ -143,11 +142,11 @@ plot(zemljevid_cluster)
 source("analiza/analiza.r", encoding="UTF-8")
 ```
 
-```{r graf.napovedi.praga.slo, echo=FALSE, fig.align='center', fig.cap='Caption'}
+```{r graf.napovedi.praga.slo, echo=FALSE, fig.align='center'}
 plot(graf.napovedi.praga.slo)
 ```
 
-```{r graf.napovedi.praga.nem, echo=FALSE, fig.align='center', fig.cap='Caption'}
+```{r graf.napovedi.praga.nem, echo=FALSE, fig.align='center'}
 plot(graf.napovedi.praga.nem)
 ```
 

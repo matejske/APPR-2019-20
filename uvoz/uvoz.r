@@ -189,43 +189,39 @@ eko.davki$Pobrani.davki <- as.numeric(eko.davki$Pobrani.davki)
 #=IZRAČUNI novih vrednosti in indeksov================================================================================
 #BDP NA PREBIVALCA
 bdp.pc <- inner_join(bdp, populacija, by=c("Drzava", "Leto"))
-bdp.pc <- transform(bdp.pc, bdp.pc.stolpec = round(((bdp.pc$BDP.E/bdp.pc$Stevilo.prebivalcev)*
-                                                      1000000), digits = 2))
+bdp.pc <- transform(bdp.pc, bdp.pc.stolpec = round(((BDP.E / Stevilo.prebivalcev) * 1000000), digits = 2))
 bdp.pc <- bdp.pc[,c(-3, -4)]
 
 
 #DOLG V BDP
 dolg.v.bdp <- inner_join(bdp, dolg, by=c("Drzava", "Leto"))
 dolg.v.bdp <- transform(dolg.v.bdp, dolg.v.bdp.stolpec = 1 - 
-                          round((dolg.v.bdp$Dolg/dolg.v.bdp$BDP.E), digits = 4))
+                          round((Dolg / BDP.E), digits = 4))
 dolg.v.bdp <- dolg.v.bdp[,c(-3, -4)]
 
 
 #EMISIJE NA PREBIVALCA (v tonah na prebivalca)
 skupne.emisije.pc <- inner_join(skupno.plini, populacija, by=c("Drzava", "Leto"))
-skupne.emisije.pc <- transform(skupne.emisije.pc, Emisije.na.prebivalca = skupne.emisije.pc$skupne.emisije/skupne.emisije.pc$Stevilo.prebivalcev)
+skupne.emisije.pc <- transform(skupne.emisije.pc, Emisije.na.prebivalca = skupne.emisije / Stevilo.prebivalcev)
 skupne.emisije.pc <- skupne.emisije.pc[,c(-3, -4)]
 
 
 #IZDATKI ZA EKOLOGIJO V BDP
 ekoizdatki.v.bdp <- inner_join(bdp, eko.potrosnja, by=c("Drzava", "Leto"))
 ekoizdatki.v.bdp <- transform(ekoizdatki.v.bdp, ekoizdatki.v.bdp.stolpec = 
-                                round((ekoizdatki.v.bdp$Izdatki.za.ekologijio/
-                                         ekoizdatki.v.bdp$BDP.E), digits = 4))
+                                round((Izdatki.za.ekologijio / BDP.E), digits = 4))
 ekoizdatki.v.bdp <- ekoizdatki.v.bdp[,c(-3,-4)]
 
 
 #IZDATKI GLEDE NA POBRANE DAVKE
 ekoizdatki.v.davkih <- inner_join(eko.potrosnja, eko.davki, by=c("Drzava", "Leto"))
 ekoizdatki.v.davkih <- transform(ekoizdatki.v.davkih, ekoizdatki.v.davkih.stolpec = 
-                                   round((ekoizdatki.v.davkih$Izdatki.za.ekologijio/
-                                            ekoizdatki.v.davkih$Pobrani.davki), digits = 4))
+                                   round((Izdatki.za.ekologijio / Pobrani.davki), digits = 4))
 ekoizdatki.v.davkih <- ekoizdatki.v.davkih[,c(-3,-4)]
 
 #EMISIJE V BDP
 emisije.v.bdp <- inner_join(skupno.plini, bdp, by=c("Drzava", "Leto"))
-emisije.v.bdp <- transform(emisije.v.bdp, emisije.v.bdp.stolpec = round(emisije.v.bdp$skupne.emisije / 
-                                                                          emisije.v.bdp$BDP.E, 4))
+emisije.v.bdp <- transform(emisije.v.bdp, emisije.v.bdp.stolpec = round(skupne.emisije / BDP.E, 4))
 emisije.v.bdp <- emisije.v.bdp[, c(-4, -3)]
 
 #IZVOZ TABEL (Tidy Data)=====================================================================================
