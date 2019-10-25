@@ -1,5 +1,5 @@
 ---
-title: "Analiza okoljske ozaveščenosti evropskih držav"
+title: "Analiza ekološke potrošnje evropskih držav"
 author: "Matej Škerlep"
 output:
   html_document: default
