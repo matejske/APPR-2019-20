@@ -18,6 +18,7 @@ bdp <- bdp %>%
            Drzava != "Euro area (19 countries)" &
            Drzava != "Euro area (12 countries)")
 bdp$Drzava <- gsub('^Germany.*', 'Germany', bdp$Drzava)
+bdp$Drzava <- gsub('^Kosovo.*', 'Kosovo', bdp$Drzava)
 bdp$BDP.E <- as.numeric(bdp$BDP.E)
 
 
@@ -46,6 +47,7 @@ emisije <- emisije  %>%
            Drzava != "Euro area (12 countries)")
 
 emisije$Drzava <- gsub('^Germany.*', 'Germany', emisije$Drzava)
+emisije$Drzava <- gsub('^Kosovo.*', 'Kosovo', emisije$Drzava)
 emisije$Izpuscene.emisije <- as.numeric(emisije$Izpuscene.emisije)
 
 
@@ -89,6 +91,7 @@ dolg <- dolg  %>%
            Drzava != "Euro area (12 countries)")
 
 dolg$Drzava <- gsub('^Germany.*', 'Germany', dolg$Drzava)
+dolg$Drzava <- gsub('^Kosovo.*', 'Kosovo', dolg$Drzava)
 dolg$Dolg <- as.numeric(dolg$Dolg)
 
 
@@ -118,6 +121,7 @@ eko.potrosnja <- eko.potrosnja  %>%
            Drzava != "Euro area (12 countries)")
 
 eko.potrosnja$Drzava <- gsub('^Germany.*', 'Germany', eko.potrosnja$Drzava)
+eko.potrosnja$Drzava <- gsub('^Kosovo.*', 'Kosovo', eko.potrosnja$Drzava)
 eko.potrosnja$Izdatki.za.ekologijio <- as.numeric(eko.potrosnja$Izdatki.za.ekologijio)
 
 
@@ -147,6 +151,7 @@ populacija <- populacija  %>%
 
 populacija$Drzava <- gsub('^Germany.*', 'Germany', populacija$Drzava)
 populacija$Drzava <- gsub('^France.*', 'France', populacija$Drzava)
+populacija$Drzava <- gsub('^Kosovo.*', 'Kosovo', populacija$Drzava)
 populacija$Stevilo.prebivalcev <- as.numeric(populacija$Stevilo.prebivalcev)
 
 
@@ -175,6 +180,7 @@ eko.davki <- eko.davki  %>%
            Drzava != "Euro area (12 countries)")
 eko.davki <- eko.davki[,c(-1,-4)]
 eko.davki$Drzava <- gsub('^Germany.*', 'Germany', eko.davki$Drzava)
+eko.davki$Drzava <- gsub('^Kosovo.*', 'Kosovo', eko.davki$Drzava)
 
 eko.davki$Pobrani.davki <- as.numeric(eko.davki$Pobrani.davki)
 
@@ -216,8 +222,11 @@ ekoizdatki.v.davkih <- transform(ekoizdatki.v.davkih, ekoizdatki.v.davkih.stolpe
                                             ekoizdatki.v.davkih$Pobrani.davki), digits = 4))
 ekoizdatki.v.davkih <- ekoizdatki.v.davkih[,c(-3,-4)]
 
-
-
+#EMISIJE V BDP
+emisije.v.bdp <- inner_join(skupno.plini, bdp, by=c("Drzava", "Leto"))
+emisije.v.bdp <- transform(emisije.v.bdp, emisije.v.bdp.stolpec = round(emisije.v.bdp$skupne.emisije / 
+                                                                          emisije.v.bdp$BDP.E, 4))
+emisije.v.bdp <- emisije.v.bdp[, c(-4, -3)]
 
 #IZVOZ TABEL (Tidy Data)=====================================================================================
 write.csv2(bdp,'podatki/tidy_BDP.csv', fileEncoding = 'UTF-8')

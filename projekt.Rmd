@@ -9,6 +9,7 @@ output:
     latex_engine: xelatex
 runtime: shiny
 ---
+![](slike/RStudio.png)
 
 ```{r setup, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
 # Če želimo nastaviti pisave v PDF-ju, odkomentiramo
@@ -24,11 +25,13 @@ source("lib/libraries.r", encoding="UTF-8")
 source("lib/rstudio.r", encoding="UTF-8")
 ```
 
+
+
 # Uvod
 
 Analiziral sem podatke o okoljski ozaveščenosti evropskih držav. Za merilo ozaveščanosti sem izbral izdatke posamezne države za ekologijo, izmerjene vrednosti emisij treh najbolj škodljivih toplogrednih plinov in pobrane davke s strani ekoloških dajatev. Zgoraj omenjene podatke sem primerjal z BDP-jem, številom prebivalcev in konsolidiranim državnim dolgom. Analiziral sem, ali obstaja korelacija med BDP-jem na prebivalca in vrednostmi emisij, kateri sektorji gospodarstva so največji onasneževalci okolja, ... 
 
-![](slike/tovarna.jpg)
+![Vir: https://epthinktank.eu](slike/tovarna.jpg)
 
 ***
 
@@ -39,7 +42,7 @@ source("uvoz/uvoz.r", encoding="UTF-8")
 ```
 
 Podatke sem uvozil v obliki CSV, ki sem jih pridobil v podatkovnih bazah Eurostat.
-Sprva so bili podatki v šestih tabelah, ki sem jih uredil v šest razpredelnic v obliki *tidy data*.
+Sprva so bili podatki v šestih tabelah, ki sem jih uredil v šest razpredelnic v obliki *tidy data*:
 
 1. `bdp` - podatki o bruto domačem proizvodu (BDP) držav Evropske unije (1998-2017)
   - `Drzava` - - spremenljivka: imena opazovanih držav, (neurejen faktor)
@@ -74,30 +77,43 @@ Sprva so bili podatki v šestih tabelah, ki sem jih uredil v šest razpredelnic 
   - `Pobrani.davki` - meritev: vrednost pobranih ekoloških davkov v milijonih evrov, (število)
 
 
-
-## Tu spodaj bom izrisal uvodne grafe:
-
 ```{r vizualizacija, echo=FALSE, message=FALSE, results='hide', warning=FALSE}
 source('vizualizacija/vizualizacija.r', encoding = 'UTF-8')
 ```
 
 
-### Uvodni tekst
-```{r graf.emisije.slo, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=7, fig.cap='Caption'}
-plot(graf.emisije.slo)
-```
-
-```{r graf.davki.slo, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=7, fig.cap='CAption'}
-plot(graf.davki.slo)
-```
-
-
-
-
-
 ***
 
 # Analiza in vizualizacija podatkov
+## Slovenija
+
+Spodnji graf prikazuje skupne vrednosti emisij treh okolju najbolj škodljivih toplogrednih plinov v Sloveniji med letoma 2008 in 2017. Lepo je razvidno upadanje megaton emisij med letoma 2018 in 2014, z manjšim porastom v letu 2011. Med letoma 2014 in 2016 je, zanimivo, prišlo do porasta, nato pa so se vrednosti ponovno začele zmanjševati.
+
+Drugi graf nam, kot nadaljevanje prvega, prikazuje letne vrednosti državnih prihodkov s strani ekoloških davkov ekoloških davkov v letih 2008 do 2017. Razlog za porast emisij v letu 2011, bi seveda lahko razložili z omilitvijo ekoloških davkov v tem letu. Nato pa je opazen močan porast pobranih davkov v prihodnjih letih, kar bi vsekakor lahko utemeljili z vedno večjim zavzemanjem za ohranjanje okolja.
+
+```{r graf.emisije.slo, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=6}
+plot(graf.emisije.slo)
+```
+
+```{r graf.davki.slo, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=6}
+plot(graf.davki.slo)
+```
+
+## Primerjava Slovenije z državami Evropske unije
+Zavedajoč se, da so toplogredni plini globalen problem, je na tem mestu primerna primerjava izpustov Slovenije z ostalimi državami Evropske unije. Seveda zgolj skupna količina izpustov ni primerljiv podatek, zato sem se odločil primerjati države glede na indeks skupne vrednosti emisij v na BDP.
+
+Sprva je tu zemljevid Evrope, ki prikazuje bruto domači proizvod (BDP) držav EU v letu 2017. Med države z najnižjim BDP-jem uvrščamo Črno Goro, Lihtenštajn, Kosovo; med tiste z najvišjim pa 
+
+
+
+
+Indeks Slovenije znaša 282,3916 ton na milijon evrov BDP, kar jo uvršča v okolico evropskega povprečja. Močno izstopajo Bulgarija, Estonija in Poljska, medtem ko je, glede na ta kazalnik najbolj ekološka država Švedska.
+
+```{r graf.emisije.v.bdp.2017, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=6}
+plot(graf.emisije.v.bdp.2017)
+```
+
+
 
 ```{r zemljevid.bdp.2016, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=7, fig.cap='CAption'}
 plot(zemljevid.bdp.2016)
@@ -107,9 +123,9 @@ plot(zemljevid.bdp.2016)
 plot(zemljevid.izdatki.v.bdp.2016)
 ```
 
-## Spodnjega plotlyja mi ne izriše
+Plotly:
 ```{r plotly.graf2, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=7, fig.cap='CAption'}
-print(plotly.graf2)
+plotly.graf2
 ```
 
 ```{r zemljevid_cluster, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=7, fig.cap='CAption'}

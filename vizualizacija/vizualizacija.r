@@ -15,19 +15,36 @@ graf.emisije.slo <- ggplot(emisije.slo, aes(x = Leto, y = skupne.emisije)) +
 # plot(graf.emisije.slo)
 
 
-#Graf ekodavkov Slovenije v letih 1998-2018=============================================================
-davki.slovenije <- eko.davki %>% filter(Drzava == "Slovenia")
+#Graf ekodavkov Slovenije v letih 2008-2018=============================================================
+davki.slovenije <- eko.davki %>% filter(Drzava == "Slovenia" & Leto >= 2008)
 
 graf.davki.slo <- ggplot(davki.slovenije, aes(x = Leto, y = Pobrani.davki)) + 
   geom_line(colour = "royalblue", size = 1.5) +
   geom_point(colour = "#000000", size = 2.5) + 
   theme_minimal() +
-  ggtitle('Prihodki Slovenije s strani ekoloških davkov \n(1998-2018)') + 
+  ggtitle('Prihodki Slovenije s strani ekoloških davkov \n(2008-2018)') + 
   ylab("Pobrani davki v milijonih €") +
   theme(plot.title = element_text(hjust = 0.5, size = 15, face = "bold")) + 
   scale_x_continuous("Leto", labels = as.character(davki.slovenije$Leto), breaks = davki.slovenije$Leto)
 # plot(graf.davki.slo)
 
+
+# Graf emisij držav glede na BDP v letu 2017 ==============================================================
+emisije.v.bdp.2017 <- emisije.v.bdp %>% filter(Leto == 2017 & is.na(emisije.v.bdp.stolpec) == FALSE)
+
+graf.emisije.v.bdp.2017 <- ggplot(emisije.v.bdp.2017, 
+                                  aes(x = reorder(Drzava, emisije.v.bdp.stolpec),
+                                      y = emisije.v.bdp.stolpec,
+                                      fill=factor(ifelse(emisije.v.bdp.2017$Drzava=="Slovenia","T","F")))) + 
+  geom_bar(stat="identity", show.legend = FALSE) +
+  scale_fill_manual(name = "emisije.v.bdp.2017$Drzava", values=c("royalblue","red")) +
+  xlab("Države") + 
+  ylab("Skupne emisije / BDP\n(tone / mio €)") + 
+  ggtitle("Indeks emisij glede na BDP \n(države EU v letu 2017)") + 
+  theme(axis.text.x=element_text(angle=90, hjust=1, vjust=0.5)) +
+  theme(plot.title = element_text(hjust = 0.5, size = 15, face = "bold"))
+
+# plot(graf.emisije.v.bdp.2017)
 
 # Uvozimo zemljevid sveta==================================================================================
 source("lib/uvozi.zemljevid.r")
@@ -50,16 +67,16 @@ drzave <- as.data.frame(drzave, stringsAsFactors=FALSE)
 names(drzave) <- "Drzava"
 
 
-#Zemljevid evropskih drzav v letu 2016 (obarvane glede na velikost BDP)====================================
+#Zemljevid evropskih drzav v letu 2017 (obarvane glede na velikost BDP)====================================
 zemljevid.bdp.2016 <- ggplot() + 
   geom_polygon(data = bdp %>% 
-                 filter(Leto == 2016) %>% 
+                 filter(Leto == 2017) %>% 
                  transform(BDP.E = bdp$BDP.E/1000) %>%
                  right_join(europe, by=c("Drzava"="NAME")), aes(x=long, y=lat, group=group, fill=BDP.E)) + 
   theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank(), 
         panel.background = element_blank()) + 
-  labs(title = "Zemljevid evropskih držav", 
-       subtitle = "BDP v letu 2016") +
+  labs(title = "Zemljevid držav EU", 
+       subtitle = "BDP v letu 2017") +
   guides(fill=guide_colorbar("BDP v \nmilijardah €")) +
   theme(plot.title = element_text(hjust = 0.5, size = 15, face = "bold"),
         plot.subtitle = element_text(hjust = 0.5),
