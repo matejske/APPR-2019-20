@@ -27,15 +27,15 @@ source("lib/rstudio.r", encoding="UTF-8")
 
 
 
-# Uvod
+# 1. Uvod
 
-Analiziral sem podatke o okoljski ozaveščenosti evropskih držav. Za merilo ozaveščanosti sem izbral izdatke posamezne države za ekologijo, izmerjene vrednosti emisij treh najbolj škodljivih toplogrednih plinov in pobrane davke s strani ekoloških dajatev. Zgoraj omenjene podatke sem primerjal z BDP-jem, številom prebivalcev in konsolidiranim državnim dolgom. Analiziral sem, ali obstaja korelacija med BDP-jem na prebivalca in vrednostmi emisij, kateri sektorji gospodarstva so največji onasneževalci okolja, ... 
+Analiziral sem podatke o ekološki ozaveščenosti evropskih držav. Za merilo ozaveščenosti sem izbral izdatke posamezne države za ekologijo, izmerjene vrednosti emisij treh najbolj škodljivih toplogrednih plinov in pobrane davke s strani ekoloških dajatev. Zgoraj omenjene podatke sem primerjal z BDP-jem, številom prebivalcev in konsolidiranim državnim dolgom. Analiziral sem, ali obstaja korelacija med BDP-jem na prebivalca in vrednostmi emisij, kateri sektorji gospodarstva so največji onesneževalci okolja, ... 
 
 ![Vir: https://epthinktank.eu](slike/tovarna.jpg)
 
 ***
 
-# Obdelava, uvoz in čiščenje podatkov
+# 2. Obdelava, uvoz in čiščenje podatkov
 
 ```{r uvoz, echo=FALSE, message=FALSE}
 source("uvoz/uvoz.r", encoding="UTF-8")
@@ -52,7 +52,7 @@ Sprva so bili podatki v šestih tabelah, ki sem jih uredil v šest razpredelnic 
 2. `emisije` - letne meritve  treh najškodljivejših toplogrednih plinov v ozračju po sektorjih gospodarstva 
   - `Drzava` - spremenljivka: imena opazovanih držav, (neurejen faktor)
   - `Leto` - spremenljivka: leto testiranja, (število)
-  - `Merjen.plin` - spremelnjivka: vrsta plina (Carbon dioxide, Carbon dioxide, Nitrous oxide), (neurejen faktor)
+  - `Merjen.plin` - spremenljivka: vrsta plina (Carbon dioxide, Carbon dioxide, Nitrous oxide), (neurejen faktor)
   - `Sector.gospodarstva` - spremenljivka: sektor gospodarstva, ki je v zrak izpustil določeno količino plina, (neurejen faktor)
   - `Izpuscene.emisije` - meritev: letna izmerjena količina v tonah, (število)
 
@@ -84,8 +84,8 @@ source('vizualizacija/vizualizacija.r', encoding = 'UTF-8')
 
 ***
 
-# Analiza in vizualizacija podatkov
-## Slovenija
+# 3. Analiza in vizualizacija podatkov
+## 3.1 Slovenija
 
 Spodnji graf prikazuje skupne vrednosti emisij treh okolju najbolj škodljivih toplogrednih plinov v Sloveniji med letoma 2008 in 2017. Lepo je razvidno upadanje megaton emisij med letoma 2018 in 2014, z manjšim porastom v letu 2011. Med letoma 2014 in 2016 je, zanimivo, prišlo do porasta, nato pa so se vrednosti ponovno začele zmanjševati.
 
@@ -99,7 +99,7 @@ plot(graf.emisije.slo)
 plot(graf.davki.slo)
 ```
 
-## Primerjava Slovenije z državami Evropske unije
+## 3.2. Primerjava Slovenije z državami EU
 Zavedajoč se, da so toplogredni plini globalen problem, je na tem mestu primerna primerjava izpustov Slovenije z ostalimi državami Evropske unije. Sprva je tu zemljevid Evrope, ki prikazuje bruto domači proizvod (BDP) držav EU v letu 2017. Med države z najnižjim BDP-jem uvrščamo Črno Goro, Lihtenštajn, Kosovo; med tiste z najvišjim pa Nemčijo, Združeno kraljestvo, Francijo in Italijo.
 
 ```{r zemljevid.bdp.2017, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=7}
@@ -107,7 +107,7 @@ plot(zemljevid.bdp.2017)
 ```
 
 Seveda zgolj skupna količina izpustov ni primerljiv podatek, zato sem se odločil primerjati države glede na kazalnik: skupna vrednost emisij / BDP.
-Kazalnik Slovenije znaša 282,3916 ton na milijon evrov BDP, kar jo uvršča rahlo pod evropsko povprečje. Iz povprečja močno izstopajo Bulgarija, Estonija in Poljska, medtem ko je, glede na ta kazalnik najbolj ekološka država Švedska.
+Kazalnik Slovenije znaša 282,3916 ton na milijon evrov BDP, kar jo uvršča rahlo pod evropsko povprečje. Iz povprečja močno izstopajo Bolgarija, Estonija in Poljska, medtem ko je, glede na ta kazalnik najbolj ekološka država Švedska.
 
 ```{r graf.emisije.v.bdp.2017, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=6}
 plot(graf.emisije.v.bdp.2017)
@@ -121,22 +121,31 @@ Najbolj v negativnem smislu izstopa Irska, med tiste z najvišji indeksi pa se u
 plot(zemljevid.izdatki.v.bdp.2016)
 ```
 
-## Korelacija med ekološkimi davki in vrednostjo emisij skozi leta (Plotly):
-Spodnji interaktivni diagram prikazuje spreminjanje 
+## 3.3. Korelacija med ekološkimi davki in vrednostjo emisij (2008-2017), Plotly
+Spodnji interaktivni diagram prikazuje spreminjanje vrednosti pobranih ekoloških davkov v milijardah evrov in količine emisij v megatonah od 2008 do 2017.
 ```{r plotly.graf2, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=7}
 plotly.graf2
 ```
 
-```{r zemljevid_cluster, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=7}
-plot(zemljevid_cluster)
+
+## 3.4. Podobnosti med državami glede na BDP in izpuščene emisije
+Zanimalo me je katere države so si med seboj podobne glede na izpuščene emisije in BDP. Zato sem jih na grupiral v pet skupin, kar je lepo razvidno na spodnjem zemljevidu. Opazimo lahko, da ponovno izstopa Nemčija, kateri glede na analizirane podatke ni podobne države. Največjo skupino sestavljajo države označene z roza barvo (jugovzhodna Evropa in Skandinavija).
+
+```{r zemljevid.cluster, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=7}
+print(zemljevid.cluster)
 ```
-
-
 
 
 ***
 
-# Napredna analiza podatkov
+# 4. Napredna analiza podatkov
+
+Največje vprašanje pri globalnem segrevanju je, kaj bomo storili v prihodnosti. Vsekakor so potrebne investicije za ohranitev planeta, zato sem skušal s pomočjo dostopnih podatkov do leta 2017 napovedati, kako se bo gibala vrednost državnih izdatkov za ekologijo do leta 2021.
+
+Sprva sem pogledal podatke za Slovenijo, a glede na precejšnjo volatilnost v preteklih letih (nekatere podatkovne točke padejo izven območja napake), lahko opazimo, da prileganje ni ravno najboljše.
+
+Zato sem se odločil narediti napoved še za nemško gospodarstvo. Tu je bilo nihanja precej manj, prav tako pa so se državni izdatki za ekologijo linearno povečevali, kar je vsekakor za pričakovati tudi v prihodnosti, saj gre za enega izmed največji akterjev v evropskem gospodarskem in političnem prostoru.
+
 
 ```{r analiza, echo=FALSE, message=FALSE}
 source("analiza/analiza.r", encoding="UTF-8")
@@ -151,8 +160,12 @@ plot(graf.napovedi.praga.nem)
 ```
 
 ***
-# Shiny
+# 5. Shiny
+Za interaktivno vizualizacijo podatkov sem naredil shiny aplikacijo, ki prikazuje še en pomemben kazalnik. Skozi leta sem prikazal gibanje vrednosti emisij na prebivalca.
 
 ```{r shiny, echo=FALSE}
 shinyAppDir("shiny", options=list(width="100%", height=600))
 ```
+
+***
+# 6. Zaključek

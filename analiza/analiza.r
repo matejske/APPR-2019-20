@@ -1,5 +1,7 @@
 #Napoved ekoloških izdatkov Slovenije v prihodnjih letih =======================================
-eko.potrosnja.slovenija <- eko.potrosnja %>% filter(Drzava == 'Slovenia')
+eko.potrosnja.slovenija <- eko.potrosnja %>%
+  filter(Drzava == 'Slovenia') %>%
+  transform(Izdatki.za.ekologijio = Izdatki.za.ekologijio / 1000)
 
 napoved <- lm(data=eko.potrosnja.slovenija, eko.potrosnja.slovenija$Izdatki.za.ekologijio ~Leto)
 dodatna.leta <- data.frame(Leto=seq(2017,2021,1))
@@ -14,7 +16,7 @@ graf.napovedi.praga.slo <- ggplot(eko.potrosnja.slovenija, aes(x=Leto, y=Izdatki
   theme(plot.title = element_text(hjust = 0.5, size = 15, face = "bold")) +
   theme_bw() +
   xlab("Leto") + 
-  ylab("Izdatki za ekologijo v milijonih €")
+  ylab("Izdatki za ekologijo v milijardah €")
 
 # plot(graf.napovedi.praga.slo)
 

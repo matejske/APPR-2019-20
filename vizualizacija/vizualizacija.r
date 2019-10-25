@@ -119,14 +119,14 @@ skupine2 <- cutree(fit, 5)
 
 cluster2 <- mutate(podobnosti, skupine2)
 
-zemljevid_cluster <- ggplot() + 
+zemljevid.cluster <- ggplot() + 
   geom_polygon(data = right_join(cluster2[c(-2:-31)], europe, by=c('Drzava')), aes(x=long, y=lat, group = group, fill=factor(skupine2))) + 
   geom_line() +
   theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank(), panel.background = element_blank()) + 
   guides(fill=guide_legend(title='Skupine')) + 
   ggtitle('Podobnosti med državami glede na letni BDP \nin izpuščene emisije') + 
   theme(plot.title = element_text(hjust = 0.5, size = 15, face = "bold"))
-#print(zemljevid_cluster)
+#print(zemljevid.cluster)
 
 #Plotly=========================================================================================================
 ##Plotly: Pobrani davki in izmerjene vrednosti emisij
