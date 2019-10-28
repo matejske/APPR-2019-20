@@ -120,7 +120,7 @@ plot(zemljevid.izdatki.v.bdp.2016)
 
 ## 3.3. Korelacija med ekološkimi davki in vrednostjo emisij (2008-2017), Plotly
 Spodnji interaktivni diagram prikazuje spreminjanje vrednosti pobranih ekoloških davkov v milijardah evrov in količine emisij v megatonah od 2008 do 2017.
-```{r plotly.graf2, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=7}
+```{r plotly.graf2, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=7, fig.cap= 'Podobnosti med državami glede na vrednost emisij in pobrane davke'}
 plotly.graf2
 ```
 

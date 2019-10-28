@@ -8,21 +8,21 @@ graf.emisije.slo <- ggplot(emisije.slo, aes(x = Leto, y = skupne.emisije)) +
   geom_line(colour = "royalblue", size = 1.5) +
   geom_point(colour = "#000000", size = 2.5) + 
   theme_minimal() +
-  ggtitle('Vrednosti letnih emisij Slovenije \n(seštevek panog v letih 1998-2018)') + 
+  ggtitle('Vrednosti letnih emisij Slovenije \n(seštevek panog v letih 1998-2017)') + 
   ylab("Vrednosti emisij v megatonah") +
   theme(plot.title = element_text(hjust = 0.5, size = 15, face = "bold")) + 
   scale_x_continuous("Leto", labels = as.character(emisije.slo$Leto), breaks = emisije.slo$Leto)
 # plot(graf.emisije.slo)
 
 
-#Graf ekodavkov Slovenije v letih 2008-2018=============================================================
+#Graf ekodavkov Slovenije v letih 2008-2017=============================================================
 davki.slovenije <- eko.davki %>% filter(Drzava == "Slovenia" & Leto >= 2008)
 
 graf.davki.slo <- ggplot(davki.slovenije, aes(x = Leto, y = Pobrani.davki)) + 
   geom_line(colour = "royalblue", size = 1.5) +
   geom_point(colour = "#000000", size = 2.5) + 
   theme_minimal() +
-  ggtitle('Prihodki Slovenije s strani ekoloških davkov \n(2008-2018)') + 
+  ggtitle('Prihodki Slovenije s strani ekoloških davkov \n(2008-2017)') + 
   ylab("Pobrani davki v milijonih €") +
   theme(plot.title = element_text(hjust = 0.5, size = 15, face = "bold")) + 
   scale_x_continuous("Leto", labels = as.character(davki.slovenije$Leto), breaks = davki.slovenije$Leto)
@@ -135,15 +135,15 @@ plotly.tabela <- plotly.tabela %>%
   filter(Leto >= "2008") %>%
   transform(skupne.emisije = skupne.emisije / 1000000) %>%
   transform(Pobrani.davki = Pobrani.davki / 1000)
+
 plotly.graf2 <- ggplot(data = plotly.tabela, aes(x=Pobrani.davki, y=skupne.emisije, color=Drzava)) +
-  geom_point(aes(frame=Leto, ids=Drzava)) + 
+  geom_point(aes(frame=Leto)) + 
   scale_x_continuous() +
   xlab("Pobrani davki v milijardah €") + 
-  ylab("Vrednost vseh emisij v megatonah")
-  
-  ggtitle('Podobnosti med državami glede na letni BDP in izpuščene emisije')
-  theme(plot.title = element_text(color="red", size=14, face="bold.italic"))
-plotly.graf2 <- ggplotly(plotly.graf2, dynamicTics=TRUE)
+  ylab("Vrednost vseh emisij v megatonah") + 
+  theme(legend.position = "none")
+
+plotly.graf2 <- ggplotly(plotly.graf2, dynamicTics=TRUE, width = 900)
 # print(plotly.graf2)
 
 
