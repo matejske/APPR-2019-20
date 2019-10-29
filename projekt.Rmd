@@ -125,7 +125,7 @@ plotly.graf2
 ```
 
 
-## 3.4. Podobnosti med državami glede na BDP in izpuščene emisije
+## 3.4. Razvrščanje držav glede na BDP in izpuščene emisije
 Zanimalo me je katere države so si med seboj podobne glede na izpuščene emisije in BDP. Zato sem jih na grupiral v pet skupin, kar je lepo razvidno na spodnjem zemljevidu. Opazimo lahko, da ponovno izstopa Nemčija, kateri glede na analizirane podatke ni podobne države. Največjo skupino sestavljajo države označene z roza barvo (jugovzhodna Evropa in Skandinavija).
 
 ```{r zemljevid.cluster, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=6.5}
@@ -161,7 +161,7 @@ plot(graf.napovedi.praga.nem)
 Za interaktivno vizualizacijo podatkov sem naredil shiny aplikacijo, ki prikazuje še en pomemben kazalnik. Skozi leta sem prikazal gibanje vrednosti emisij na prebivalca.
 
 ```{r shiny, echo=FALSE}
-shinyAppDir("shiny", options=list(width="100%", height=600))
+shinyAppDir("shiny", options=list(width="100%", height=720))
 ```
 
 ***

@@ -152,10 +152,11 @@ zemljevid.leto <- function(letnica, sektor="Total - all NACE activities") {
   
   ggplot() + geom_polygon(data = plini.sektorji %>% 
                             filter(Leto == letnica & Sector.gospodarstva == sektor) %>%
-                            right_join(europe, by=c("Drzava"="NAME")),
+                            right_join(europe, by=c("Drzava"="NAME")) %>%
+                            transform(skupne.emisije = round(skupne.emisije / 1000000, 4)),
                           aes(x = long, y = lat, group = group, fill=skupne.emisije)) + 
     xlab("") + ylab("")  + 
-    guides(fill=guide_colorbar("Vrednost emisij \nv tonah na prebivalca")) +
+    guides(fill=guide_colorbar("Vrednost emisij \nv megatonah")) +
     theme(axis.title=element_blank(), 
           axis.text=element_blank(), 
           axis.ticks=element_blank(), 
