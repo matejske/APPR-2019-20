@@ -148,15 +148,18 @@ plotly.graf2 <- ggplotly(plotly.graf2, dynamicTics=TRUE, width = 900)
 
 
 #FUNKCIJA ZA SHINY==============================================================================================
-zemljevid.leto <- function(cifra) {
+zemljevid.leto <- function(letnica, sektor="Total - all NACE activities") {
   
-  ggplot() + geom_polygon(data = skupne.emisije.pc %>% 
-                            filter(Leto == cifra) %>%
+  ggplot() + geom_polygon(data = plini.sektorji %>% 
+                            filter(Leto == letnica & Sector.gospodarstva == sektor) %>%
                             right_join(europe, by=c("Drzava"="NAME")),
-                          aes(x = long, y = lat, group = group, fill=Emisije.na.prebivalca)) + 
+                          aes(x = long, y = lat, group = group, fill=skupne.emisije)) + 
     xlab("") + ylab("")  + 
     guides(fill=guide_colorbar("Vrednost emisij \nv tonah na prebivalca")) +
-    theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank(), panel.background = element_blank()) + 
+    theme(axis.title=element_blank(), 
+          axis.text=element_blank(), 
+          axis.ticks=element_blank(), 
+          panel.background = element_blank()) + 
     scale_fill_gradient(low = "#32CD32", high="#8b4513")
   
 }

@@ -14,3 +14,6 @@ shinyUI(fluidPage(
   ),
   mainPanel(plotOutput("zemljevid.leto")))
 )
+
+
+

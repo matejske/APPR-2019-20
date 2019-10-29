@@ -66,6 +66,12 @@ skupno.plini <- skupno.plini %>% filter(Sector.gospodarstva == 'Total - all NACE
 skupno.plini <- skupno.plini[, c(-(4:9), -1)]
 
 
+#==================================================
+plini.sektorji <- inner_join(metan, co.2, by = c("Drzava", "Leto", "Sector.gospodarstva"))
+plini.sektorji <- inner_join(plini.sektorji, no.2, by = c("Drzava", "Leto", "Sector.gospodarstva"))
+plini.sektorji$skupne.emisije <- plini.sektorji$Izpuscene.emisije.x + 
+  plini.sektorji$Izpuscene.emisije.y + plini.sektorji$Izpuscene.emisije
+plini.sektorji <- plini.sektorji[, c(-(5:9), -1)]
 
 
 #3. TABELA: Konsolidirani državni dolg (v milijonih evrov) (1995-2018)================================================

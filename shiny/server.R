@@ -6,3 +6,5 @@ function(input, output) {
     zemljevid.leto(input$leto) + theme(axis.text.x = element_blank())
   })
 }
+
+
