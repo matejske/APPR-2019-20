@@ -105,7 +105,7 @@ zemljevid.izdatki.v.bdp.2016 <- ggplot() +
 # plot(zemljevid.izdatki.v.bdp.2016)
 
 
-#Cluster==================================================================================================
+#Razvrščanje (Cluster) ==================================================================================================
 ##Podobnosti med državami glede na letni BDP in izpuščene emisije
 podobnosti <- dcast(bdp, Drzava~Leto, value.var = 'BDP.E')
 priprava.plini <- skupno.plini %>% 
@@ -124,7 +124,7 @@ zemljevid.cluster <- ggplot() +
   geom_line() +
   theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank(), panel.background = element_blank()) + 
   guides(fill=guide_legend(title='Skupine')) + 
-  ggtitle('Podobnosti med državami glede na letni BDP \nin izpuščene emisije') + 
+  ggtitle('Razvrščanje držav glede na letni BDP \nin izpuščene emisije') + 
   theme(plot.title = element_text(hjust = 0.5, size = 15, face = "bold"))
 #print(zemljevid.cluster)
 

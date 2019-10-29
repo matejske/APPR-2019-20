@@ -66,7 +66,7 @@ skupno.plini <- skupno.plini %>% filter(Sector.gospodarstva == 'Total - all NACE
 skupno.plini <- skupno.plini[, c(-(4:9), -1)]
 
 
-#==================================================
+#===============
 plini.sektorji <- inner_join(metan, co.2, by = c("Drzava", "Leto", "Sector.gospodarstva"))
 plini.sektorji <- inner_join(plini.sektorji, no.2, by = c("Drzava", "Leto", "Sector.gospodarstva"))
 plini.sektorji$skupne.emisije <- plini.sektorji$Izpuscene.emisije.x + 
