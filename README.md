@@ -7,23 +7,53 @@ Repozitorij z gradivi pri predmetu APPR v študijskem letu 2019/20
 
 ## Analiza okoljske ozaveščenosti evropskih držav
 
-Analiziral bom podatke o okoljski ozaveščenosti evropskih držav. Za merilo ozaveščanosti bom izbral izdatke posamezne države za ekologijo, izmerjene vrednosti emisij treh najbolj škodljivih toplogrednih plinov in pobrane davke s strani ekoloških dajatev. Zgoraj omenjene podatke bom primerjal z BDP-jem, številom prebivalcev in konsolidiranim državnim dolgom. Analiziral bom, ali obstaja korelacija med BDP-jem na prebivalca in vrednostmi emisij, kateri sektorji gospodarstva so največji onasneževalci okolja, ...
+Analiziral sem ekološke podatke držav Evropske unije. Za merilo ozaveščenosti sem izbral izdatke posamezne države za ekologijo, izmerjene vrednosti emisij treh najbolj škodljivih toplogrednih plinov, površino  pokrito z gozdom in pobrane davke s strani ekoloških dajatev. Zgoraj omenjene podatke sem primerjal z BDP-jem, številom prebivalcev in konsolidiranim državnim dolgom. Naredil sem tudi napovedi količine državnih izdatkov za ekologijo za Slovenijo in Nemčijo.
 
 Da bom lahko opazoval povezave med temi spremenljivkami, bom podatke uredil v sledeče tabele. 
 
 Tabele:
-* tabela 1: država, leto, BDP (v milijonih evrov)
-* tabela 2: država, leto, STEVILO PREBIVALCEV
-* tabela 3: država, leto, KONSOLIDIRANI DRZAVNI DOLG (v milijonih evrov)
-* tabela 4: država, leto, IZDATKI ZA EKOLOGIJO (v milijonih evrov)
-* tabela 5: država, leto, merjen plin, sektor gospodarstva, KOLICINA IZPUSCENIH EMISIJ (v tonah)
-* tabela 6: država, leto, POBRANI EKOLOSKI DAVKI (v milijonih evrov)
+1. `bdp` - podatki o bruto domačem proizvodu (BDP) držav Evropske unije (1998-2017)
+  - `Drzava` - - spremenljivka: imena opazovanih držav, (neurejen faktor)
+  - `Leto` - spremenljivka: leto testiranja, (število)
+  - `BDP.E` - meritev: BDP v tekočih cenah v milijonih evrov, (število)
+  
+2. `emisije` - letne meritve  treh najškodljivejših toplogrednih plinov v ozračju po sektorjih gospodarstva 
+  - `Drzava` - spremenljivka: imena opazovanih držav, (neurejen faktor)
+  - `Leto` - spremenljivka: leto testiranja, (število)
+  - `Merjen.plin` - spremenljivka: vrsta plina (Carbon dioxide, Carbon dioxide, Nitrous oxide), (neurejen faktor)
+  - `Sector.gospodarstva` - spremenljivka: sektor gospodarstva, ki je v zrak izpustil določeno količino plina, (neurejen faktor)
+  - `Izpuscene.emisije` - meritev: letna izmerjena količina v tonah, (število)
+
+3. `gozd` - površina gozdnatih površin v kvadratnih kilometrih v letu 2017
+  - `Drzava` - spremenljivka: imena opazovanih držav, (neurejen faktor)
+  - `Povrsina.gozda` - meritev: skupna površina v kvadratnih kilometrih, (število)
+
+4. `dolg` - konsolidirani državni dolg Konsolidirani državni dolg (1998-2017)
+  - `Drzava` - spremenljivka: imena opazovanih držav, (neurejen faktor)
+  - `Leto` - spremenljivka: leto testiranja, (število)
+  - `Dolg` - meritev: vrednost dolga v milijonih evrov, (število)
+
+5. `eko.potrosnja` - letni državni izdatki za ekologijo (1998-2017)
+  - `Drzava` - spremenljivka: imena opazovanih držav, (neurejen faktor)
+  - `Leto` - spremenljivka: leto testiranja, (število)
+  - `Izdatki.za.ekologijio` - meritev: izdatki (potrošnja) držav za ekologijo v milijonih evrov, (število)
+  
+6. `populacija` - število prebivalcev držav Evropske unije (1998-2017)
+  - `Drzava` - spremenljivka: imena opazovanih držav, (neurejen faktor)
+  - `Leto` - spremenljivka: leto testiranja, (število)
+  - `Stevilo.prebivalcev` - meritev: število prebivalcev, (število)
+
+7. `eko.davki` - letni državni prihodki s strani ekoloških davkov za podjetja in posameznike
+  - `Drzava` - spremenljivka: imena opazovanih držav, (neurejen faktor)
+  - `Leto` - spremenljivka: leto testiranja, (število)
+  - `Pobrani.davki` - meritev: vrednost pobranih ekoloških davkov v milijonih evrov, (število)
 
 Podatki bodo obsegali obdobje zadnjih 20 let, torej 1998 - 2018.
 
 Viri: 
-* https://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=nama_10_gdp&lang=en (ZELIM V HTML)
+* https://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=nama_10_gdp&lang=en 
 * https://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=demo_pjan&lang=en
+* https://www.worldatlas.com/articles/european-countries-with-the-most-forest-cover.html
 * https://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=gov_10dd_ggd&lang=en
 * https://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=env_ac_epneis&lang=en
 * https://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=env_ac_ainah_r2&lang=en
