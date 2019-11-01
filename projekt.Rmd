@@ -1,5 +1,5 @@
 ---
-title: "Analiza ekološke potrošnje evropskih držav"
+title: "Analiza ekološke potrošnje držav Evropske unije"
 author: "Matej Škerlep"
 output:
   html_document: default
@@ -26,7 +26,7 @@ source("lib/rstudio.r", encoding="UTF-8")
 
 # 1. Uvod
 
-Analiziral sem podatke o ekološki ozaveščenosti evropskih držav. Za merilo ozaveščenosti sem izbral izdatke posamezne države za ekologijo, izmerjene vrednosti emisij treh najbolj škodljivih toplogrednih plinov in pobrane davke s strani ekoloških dajatev. Zgoraj omenjene podatke sem primerjal z BDP-jem, številom prebivalcev in konsolidiranim državnim dolgom. Analiziral sem, ali obstaja korelacija med BDP-jem na prebivalca in vrednostmi emisij, kateri sektorji gospodarstva so največji onesneževalci okolja, ... 
+Analiziral sem ekološke podatke držav Evropske unije. Za merilo ozaveščenosti sem izbral izdatke posamezne države za ekologijo, izmerjene vrednosti emisij treh najbolj škodljivih toplogrednih plinov, površino  pokrito z gozdom in pobrane davke s strani ekoloških dajatev. Zgoraj omenjene podatke sem primerjal z BDP-jem, številom prebivalcev in konsolidiranim državnim dolgom. Naredil sem tudi napovedi količine državnih izdatkov za ekologijo za Slovenijo in Nemčijo.
 
 ![Vir: https://epthinktank.eu](slike/tovarna.jpg)
 
@@ -38,7 +38,7 @@ Analiziral sem podatke o ekološki ozaveščenosti evropskih držav. Za merilo o
 source("uvoz/uvoz.r", encoding="UTF-8")
 ```
 
-Podatke sem uvozil v obliki HTML in CSB, ki sem jih pridobil v podatkovnih bazah Eurostat in na spletni strani [World atlas](https://www.worldatlas.com/articles/european-countries-with-the-most-forest-cover.html).
+Podatke sem uvozil v obliki HTML in CSV, ki sem jih pridobil na spletni strani [World atlas](https://www.worldatlas.com/articles/european-countries-with-the-most-forest-cover.html) in v podatkovnih bazah Eurostat-a.
 Sprva so bili podatki v sedmih tabelah, ki sem jih uredil v sedem razpredelnic v obliki *tidy data*:
 
 1. `bdp` - podatki o bruto domačem proizvodu (BDP) držav Evropske unije (1998-2017)
@@ -114,8 +114,8 @@ Kazalnik Slovenije znaša 282,3916 ton na milijon evrov BDP, kar jo uvršča rah
 plot(graf.emisije.v.bdp.2017)
 ```
 
-Pomemben pokazatelj ekološke ozaveščenosti držav je tudi znesek, ki ga posamezna država nameni za ekologijo (t.i. ekološki izdatki). Tu so vštete razne subvencije za nakup električnih avtomobilov, energetske sanacije stavb, subvencije podjetjem za izboljšanje proizvodnje in davčne olajšave podjetjem v primeru izpolnjevanja ekoloških standardov. Podobno kot zgoraj nam sam podatek on neto izdatkih ne pove prav dosti, zato sem ponovno izračunal indeks izdatkov za ekologijo glede na BDP.
-Najbolj v negativnem smislu izstopa Irska, med tiste z najvišji indeksi pa se uvrščajo Belgija, Avstrija in zanimivo tudi Češka, ki je bila na visokem četrtem mestu po izpustu emisij. Visok koeficient izdatkov v BDP-ju Češke je torej razumljiv in obeta zmanjšanje onesnaževanja v prihodnjih letih.
+Pomemben pokazatelj ekološke ozaveščenosti držav je tudi znesek, ki ga posamezna država nameni za ekologijo (t.i. ekološki izdatki). Tu so vštete razne subvencije za nakup električnih avtomobilov, energetske sanacije stavb, subvencije podjetjem za izboljšanje proizvodnje in davčne olajšave podjetjem v primeru izpolnjevanja ekoloških standardov. Podobno kot zgoraj, nam sam podatek o neto izdatkih ne pove prav dosti, zato sem ponovno izračunal indeks izdatkov za ekologijo glede na BDP.
+Najbolj (v negativnem smislu) izstopa Irska, med tiste z najvišji indeksi pa se uvrščajo Belgija, Avstrija in zanimivo tudi Češka, ki je bila na visokem četrtem mestu po izpustu emisij. Visok koeficient izdatkov v BDP-ju Češke je torej razumljiv in obeta zmanjšanje onesnaževanja v prihodnjih letih.
 
 
 ```{r zemljevid.izdatki.v.bdp.2016, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=6.5}
@@ -136,6 +136,15 @@ Zanimalo me je katere države so si med seboj podobne glede na izpuščene emisi
 print(zemljevid.cluster)
 ```
 
+## 3.5. Vrednost emisij glede na površino gozdnatih površin
+V analizi sem pogledal tudi, kako se je ekosistem posameznih držav sposoben samoobnavljati. Pomembno informacijo o tem lahko dobimo iz površine gozdnatih površin posamezne države, saj so ravno rastline tiste, ki ogljikov dioksid porablajo za fotosintezo in nato sproščajo kisik. Zato sem primerjal vrednosti sproščenih emisij v ozračje s površino gozda v posamezni državi. 
+
+V spodnjem grafu zaradi preglednosti nisem prikazal Malte in Nizozemske, saj njune vrednosti izjemno izstopata. To je povsem razumljivo, saj ima Malta zaradi svoje geografske lege in podnebja zelo malo gozdov.Prav tako pa ima tudi Nizozemska zelo malo gozda (3760 kvadratnih kilometov) primerjajoč ga s skoraj 150 megatonami emisij. Slovenija se predvsem zaradi svoje izjemne gozdnatosti uvršča med najboljših sedem držav v tem pogledu.
+
+```{r graf.gozd.emisije, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=6.5}
+plot(graf.gozd.emisije)
+```
+
 
 ***
 
@@ -145,7 +154,7 @@ Največje vprašanje pri globalnem segrevanju je, kaj bomo storili v prihodnosti
 
 Sprva sem pogledal podatke za Slovenijo, a glede na precejšnjo volatilnost v preteklih letih (nekatere podatkovne točke padejo izven območja napake), lahko opazimo, da prileganje ni ravno najboljše.
 
-Zato sem se odločil narediti napoved še za nemško gospodarstvo. Tu je bilo nihanja precej manj, prav tako pa so se državni izdatki za ekologijo linearno povečevali, kar je vsekakor za pričakovati tudi v prihodnosti, saj gre za enega izmed največji akterjev v evropskem gospodarskem in političnem prostoru.
+Zato sem se odločil narediti napoved še za nemško gospodarstvo. Tu je bilo nihanja precej manj, prav tako pa so se državni izdatki za ekologijo linearno povečevali, kar je vsekakor pričakovano tudi v prihodnosti, saj gre za enega izmed največji akterjev v evropskem gospodarskem in političnem prostoru.
 
 
 ```{r analiza, echo=FALSE, message=FALSE}
@@ -170,3 +179,5 @@ shinyAppDir("shiny", options=list(width="100%", height=720))
 
 ***
 # 6. Zaključek
+
+Iz dane analize, lahko vidimo, da se ekološke situacije v državah EU začenjajo izboljševati. V analizi sem sicer vzel zgolj države EU, kar je v posameznih segmentih lahko premalo, sploh ker je globalno segrevanje problem celotnega planeta. A vseeno sem iz podatkov za Evropsko unijo lahko ugotovil precej zanimivih stvari. Iz zgleda preteklih dogodkov v Sloveniji lahko vidimo, kako pozitivno vpliva zvišanje eko-davkov na zmanjšanje vrednosti emisij. V večih segmentih analize je izstopala Švedska, ki je lahko zgled ostalim državam. Iz napovedi za prihodnja leta lahko sklepamo na povečanje izdatkov za ohranjanje okolja vseh držav, saj morajo prav pri problemu globalnega segrevanja stopiti skupaj in delovati kot celota preden bo prepozno.
