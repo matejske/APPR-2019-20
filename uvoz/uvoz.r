@@ -65,8 +65,7 @@ skupno.plini$skupne.emisije <- skupno.plini$Izpuscene.emisije.x +
 skupno.plini <- skupno.plini %>% filter(Sector.gospodarstva == 'Total - all NACE activities')
 skupno.plini <- skupno.plini[, c(-(4:9), -1)]
 
-
-#===============
+# ---DFSFDGFRGRVBFDVSGVRTFEDGFTREWGEWFDEDS
 plini.sektorji <- inner_join(metan, co.2, by = c("Drzava", "Leto", "Sector.gospodarstva"))
 plini.sektorji <- inner_join(plini.sektorji, no.2, by = c("Drzava", "Leto", "Sector.gospodarstva"))
 plini.sektorji$skupne.emisije <- plini.sektorji$Izpuscene.emisije.x + 
@@ -74,7 +73,30 @@ plini.sektorji$skupne.emisije <- plini.sektorji$Izpuscene.emisije.x +
 plini.sektorji <- plini.sektorji[, c(-(5:9), -1)]
 
 
-#3. TABELA: Konsolidirani državni dolg (v milijonih evrov) (1995-2018)================================================
+
+
+
+# 3. TABELA: Pokritost držav z gozdom (v 1000 ha -> km^2) =============================
+uvozi.gozd <- function(){
+  link <- "https://www.worldatlas.com/articles/european-countries-with-the-most-forest-cover.html"
+  stran <- html_session(link) %>% read_html()
+  gozd <- stran %>% html_node(xpath="//*[@id='artReg-table']/table") %>% 
+    html_table()
+}
+
+
+# Čiscenje podatkov
+gozd <- uvozi.gozd()
+gozd <- gozd[,-1]
+colnames(gozd) <- c("Drzava", "Povrsina.gozda")
+gozd$Povrsina.gozda <- parse_number(gozd$Povrsina.gozda, na = character(), 
+                                    locale = locale(decimal_mark = ".", grouping_mark = ",", encoding = "UTF-8"))
+
+## Pretvorba v kvadratne kilometre (1000 ha = 10 km^2)
+gozd <- transform(gozd, Povrsina.gozda = (Povrsina.gozda * 10))
+
+
+#4. TABELA: Konsolidirani državni dolg (v milijonih evrov) (1995-2018)================================================
 dolg <- read_csv(file = 'podatki/dolg.csv', skip = 1,
                  locale=locale(grouping_mark=".", encoding="Windows-1250"),
                  col_names = c("A", "Drzava", "Leto", "B", "C", "Dolg"),
@@ -104,7 +126,7 @@ dolg$Dolg <- as.numeric(dolg$Dolg)
 
 
 
-#4. TABELA: Izdatki držav za ekologijo (v milijonih evrov) (2006-2018)================================================
+#5. TABELA: Izdatki držav za ekologijo (v milijonih evrov) (2006-2018)================================================
 eko.potrosnja <- read_csv(file = 'podatki/ekoloska_potrosnja.csv', skip = 1,
                           locale=locale(grouping_mark=".", encoding="Windows-1250"),
                           col_names = c("A", "Drzava", "Leto", "B", "Izdatki.za.ekologijio"),
@@ -134,7 +156,7 @@ eko.potrosnja$Izdatki.za.ekologijio <- as.numeric(eko.potrosnja$Izdatki.za.ekolo
 
 
 
-#5. TABELA: ŠTEVILO PREBIVALCEV (1960-2018)==========================================================================
+#6. TABELA: ŠTEVILO PREBIVALCEV (1960-2018)==========================================================================
 populacija <- read_csv('podatki/populacija.csv', skip = 1,
                        locale=locale(grouping_mark=".", encoding="Windows-1250"),
                        col_names = c("A", "Drzava", "Leto", "B", "C", "Stevilo.prebivalcev"),
@@ -163,7 +185,7 @@ populacija$Stevilo.prebivalcev <- as.numeric(populacija$Stevilo.prebivalcev)
 
 
 
-#6. TABELA: Pobrani davki s strani ekoloških dajatev (v miljonih evrov) (1995-2017)===================================
+#7. TABELA: Pobrani davki s strani ekoloških dajatev (v miljonih evrov) (1995-2017)===================================
 eko.davki <- read_csv(file = 'podatki/ekoloski_davki.csv', skip = 1,
                       locale=locale(grouping_mark=".", encoding="Windows-1250"),
                       col_names = c("A", "Drzava", "Leto", "B", "Pobrani.davki"),
@@ -193,45 +215,53 @@ eko.davki$Pobrani.davki <- as.numeric(eko.davki$Pobrani.davki)
 
 
 #=IZRAČUNI novih vrednosti in indeksov================================================================================
-#BDP NA PREBIVALCA
+#BDP NA PREBIVALCA ----
 bdp.pc <- inner_join(bdp, populacija, by=c("Drzava", "Leto"))
 bdp.pc <- transform(bdp.pc, bdp.pc.stolpec = round(((BDP.E / Stevilo.prebivalcev) * 1000000), digits = 2))
 bdp.pc <- bdp.pc[,c(-3, -4)]
 
+#KOLICINA EMISIJ vseh SEKTORJEV GLEDE na količino gozda (2017) ----
+gozd.emisije <- inner_join(gozd, plini.sektorji, by = "Drzava")
+gozd.emisije <- gozd.emisije %>% 
+  filter(Leto == 2017 & Sector.gospodarstva == "Total - all NACE activities") %>%
+  transform(Emisije.na.povrsino = skupne.emisije / Povrsina.gozda)
+gozd.emisije <- gozd.emisije[,-c(2:5)]
 
-#DOLG V BDP
+
+#DOLG V BDP ----
 dolg.v.bdp <- inner_join(bdp, dolg, by=c("Drzava", "Leto"))
 dolg.v.bdp <- transform(dolg.v.bdp, dolg.v.bdp.stolpec = 1 - 
                           round((Dolg / BDP.E), digits = 4))
 dolg.v.bdp <- dolg.v.bdp[,c(-3, -4)]
 
 
-#EMISIJE NA PREBIVALCA (v tonah na prebivalca)
+#EMISIJE NA PREBIVALCA (v tonah na prebivalca) ----
 skupne.emisije.pc <- inner_join(skupno.plini, populacija, by=c("Drzava", "Leto"))
 skupne.emisije.pc <- transform(skupne.emisije.pc, Emisije.na.prebivalca = skupne.emisije / Stevilo.prebivalcev)
 skupne.emisije.pc <- skupne.emisije.pc[,c(-3, -4)]
 
 
-#IZDATKI ZA EKOLOGIJO V BDP
+#IZDATKI ZA EKOLOGIJO V BDP ----
 ekoizdatki.v.bdp <- inner_join(bdp, eko.potrosnja, by=c("Drzava", "Leto"))
 ekoizdatki.v.bdp <- transform(ekoizdatki.v.bdp, ekoizdatki.v.bdp.stolpec = 
                                 round((Izdatki.za.ekologijio / BDP.E), digits = 4))
 ekoizdatki.v.bdp <- ekoizdatki.v.bdp[,c(-3,-4)]
 
 
-#IZDATKI GLEDE NA POBRANE DAVKE
+#IZDATKI GLEDE NA POBRANE DAVKE ---- 
 ekoizdatki.v.davkih <- inner_join(eko.potrosnja, eko.davki, by=c("Drzava", "Leto"))
 ekoizdatki.v.davkih <- transform(ekoizdatki.v.davkih, ekoizdatki.v.davkih.stolpec = 
                                    round((Izdatki.za.ekologijio / Pobrani.davki), digits = 4))
 ekoizdatki.v.davkih <- ekoizdatki.v.davkih[,c(-3,-4)]
 
-#EMISIJE V BDP
+#EMISIJE V BDP ----
 emisije.v.bdp <- inner_join(skupno.plini, bdp, by=c("Drzava", "Leto"))
 emisije.v.bdp <- transform(emisije.v.bdp, emisije.v.bdp.stolpec = round(skupne.emisije / BDP.E, 4))
 emisije.v.bdp <- emisije.v.bdp[, c(-4, -3)]
 
 #IZVOZ TABEL (Tidy Data)=====================================================================================
 write.csv2(bdp,'podatki/tidy_BDP.csv', fileEncoding = 'UTF-8')
+write.csv2(gozd, 'podatki/tidy_gozd.csv', fileEncoding = 'UTF-8')
 write.csv2(populacija,'podatki/tidy_populacija.csv', fileEncoding = 'UTF-8')
 write.csv2(dolg,'podatki/tidy_dolg.csv', fileEncoding = 'UTF-8')
 write.csv2(eko.potrosnja,'podatki/tidy_ekoloska_potrosnja.csv', fileEncoding = 'UTF-8')

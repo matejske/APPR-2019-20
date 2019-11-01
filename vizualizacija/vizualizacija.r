@@ -46,6 +46,7 @@ graf.emisije.v.bdp.2017 <- ggplot(emisije.v.bdp.2017,
 
 # plot(graf.emisije.v.bdp.2017)
 
+
 # Uvozimo zemljevid sveta==================================================================================
 source("lib/uvozi.zemljevid.r")
 svet <- uvozi.zemljevid("https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_countries.zip", 
@@ -84,7 +85,6 @@ zemljevid.bdp.2017 <- ggplot() +
         legend.position = "right")
 
 # plot(zemljevid.bdp.2017)
-
 
 
 #Zemljevid INDEKSA eko izdatkov glede na bdp================================================================
@@ -145,6 +145,25 @@ plotly.graf2 <- ggplot(data = plotly.tabela, aes(x=Pobrani.davki, y=skupne.emisi
 
 plotly.graf2 <- ggplotly(plotly.graf2, dynamicTics=TRUE, width = 900)
 # print(plotly.graf2)
+
+
+# Graf vrednosti emisij glede na kolicino gozda ================================
+gozd.emisije.graf <- gozd.emisije %>% filter(is.na(Emisije.na.povrsino) == FALSE &
+                                               Drzava != "Malta" &
+                                               Drzava != "Netherlands")
+graf.gozd.emisije <- ggplot(gozd.emisije.graf, 
+                                  aes(x = reorder(Drzava, Emisije.na.povrsino),
+                                      y = Emisije.na.povrsino,
+                                      fill=factor(ifelse(gozd.emisije.graf$Drzava == "Slovenia","T","F")))) + 
+  geom_bar(stat="identity", show.legend = FALSE) +
+  scale_fill_manual(name = "gozd.emisije$Drzava", values=c("#66CC00","red")) +
+  xlab("Države") + 
+  ylab("Skupne emisije / površina gozda\n(tone / kvadratni kilometri)") + 
+  ggtitle("Vrednost emisij glede na površino gozda v letu 2017") + 
+  theme(axis.text.x=element_text(angle=90, hjust=1, vjust=0.5)) +
+  theme(plot.title = element_text(hjust = 0.5, size = 15, face = "bold"))
+
+# plot(graf.gozd.emisije)
 
 
 #FUNKCIJA ZA SHINY==============================================================================================

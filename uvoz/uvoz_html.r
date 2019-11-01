@@ -1,15 +1,19 @@
-# UVOZ BDP-ja z Wikipedije
-
-uvozi.bruto.domaci.proizvod <- function(){
-  link <- "https://en.wikipedia.org/wiki/List_of_countries_by_GDP_(nominal)"
+# Pokritost držav z gozdom
+source("lib/libraries.r")
+uvozi.gozd <- function(){
+  link <- "https://www.worldatlas.com/articles/european-countries-with-the-most-forest-cover.html"
   stran <- html_session(link) %>% read_html()
-  bruto.domaci.proizvod <- stran %>% html_nodes(xpath= "//*[@id="mw-content-text"]/div/table[2]") %>% 
+  gozd <- stran %>% html_node(xpath="//*[@id='artReg-table']/table") %>% 
     html_table()
-
+  
 }
 
-bruto.domaci.proizvod <- uvozi.bruto.domaci.proizvod()
 
+gozd <- uvozi.gozd()
 
-#Alternativno iz:
-#https://appsso.eurostat.ec.europa.eu/nui/submitViewTableAction.do
+#Pokritost v 1000 hektarih
+# Ciscenje
+gozd <- gozd[,-1]
+colnames(gozd) <- c("Drzava", "Povrsina.gozda")
+gozd$Povrsina.gozda <- parse_number(gozd$Povrsina.gozda, na = character(), 
+                                    locale = locale(decimal_mark = ".", grouping_mark = ",", encoding = "UTF-8"))
