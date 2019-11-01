@@ -7,7 +7,7 @@ Repozitorij z gradivi pri predmetu APPR v študijskem letu 2019/20
 
 ## Analiza okoljske ozaveščenosti evropskih držav
 
-Analiziral bom podatke o okoljski ozaveščenosti evropskih držav. Za merilo ozaveščanosti bom izbral izdatke posamezne države za ekologijo, izmerjene vrednosti emisij treh najbolj škodljivih toplogrednih plinov in pobrane davke s strani ekoloških dajatev. Zgoraj omenjene podatke bom primerjal z BDP-jem, številom prebivalcev in konsolidiranim državnim dolgom. Analiziral bom, ali obstaja korelacija med BDP-jem na prebivalca in vrednostmi emisij, kateri sektorji gospodarstva so največji onasneževalci okolja, ...
+Analiziral sem ekološke podatke držav Evropske unije. Za merilo ozaveščenosti sem izbral izdatke posamezne države za ekologijo, izmerjene vrednosti emisij treh najbolj škodljivih toplogrednih plinov, površino  pokrito z gozdom in pobrane davke s strani ekoloških dajatev. Zgoraj omenjene podatke sem primerjal z BDP-jem, številom prebivalcev in konsolidiranim državnim dolgom. Naredil sem tudi napovedi količine državnih izdatkov za ekologijo za Slovenijo in Nemčijo.
 
 Da bom lahko opazoval povezave med temi spremenljivkami, bom podatke uredil v sledeče tabele. 
 
@@ -22,14 +22,17 @@ Tabele:
 Podatki bodo obsegali obdobje zadnjih 20 let, torej 1998 - 2018.
 
 Viri: 
-* https://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=nama_10_gdp&lang=en (ZELIM V HTML)
+* https://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=nama_10_gdp&lang=en 
 * https://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=demo_pjan&lang=en
 * https://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=gov_10dd_ggd&lang=en
 * https://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=env_ac_epneis&lang=en
 * https://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=env_ac_ainah_r2&lang=en
 * https://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=env_ac_tax&lang=en
 
-
+1. `bdp` - podatki o bruto domačem proizvodu (BDP) držav Evropske unije (1998-2017)
+  - `Drzava` - - spremenljivka: imena opazovanih držav, (neurejen faktor)
+  - `Leto` - spremenljivka: leto testiranja, (število)
+  - `BDP.E` - meritev: BDP v tekočih cenah v milijonih evrov, (število)
 ## Program
 
 Glavni program in poročilo se nahajata v datoteki `projekt.Rmd`.
