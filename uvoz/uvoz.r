@@ -1,9 +1,9 @@
 source("lib/libraries.r")
 #=====================================================================================================================
 #1. TABELA: BDP v tekočih cenah (v milijonih evrov) (1975-2018)=======================================================
-bdp <- read_csv('podatki/BDP.csv', skip = 1,
-                col_names = c("A", "Drzava", "Leto", "B", "BDP.E"),
-                na = c(":", " ", "", "-"),
+bdp <- read_csv('podatki/BDP.csv', skip=1,
+                col_names=c("A", "Drzava", "Leto", "B", "BDP.E"),
+                na=c(":", " ", "", "-"),
                 locale=locale(grouping_mark=".", encoding="Windows-1250"))
 
 bdp <- bdp[,c(-1, -4)]
@@ -68,8 +68,8 @@ uvozi.gozd <- function(){
 gozd <- uvozi.gozd()
 gozd <- gozd[,-1]
 colnames(gozd) <- c("Drzava", "Povrsina.gozda")
-gozd$Povrsina.gozda <- parse_number(gozd$Povrsina.gozda, na = character(), 
-                                    locale = locale(decimal_mark = ".", grouping_mark = ",", encoding = "UTF-8"))
+gozd$Povrsina.gozda <- parse_number(gozd$Povrsina.gozda, na=character(), 
+                                    locale = locale(decimal_mark=".", grouping_mark=",", encoding="UTF-8"))
 
 ## Pretvorba v kvadratne kilometre (1000 ha = 10 km^2)
 gozd <- transform(gozd, Povrsina.gozda = (Povrsina.gozda * 10))
@@ -78,10 +78,10 @@ gozd <- transform(gozd, Povrsina.gozda = (Povrsina.gozda * 10))
 
 
 #4. TABELA: Izdatki držav za ekologijo (v milijonih evrov) (2006-2018)================================================
-eko.potrosnja <- read_csv(file = 'podatki/ekoloska_potrosnja.csv', skip = 1,
+eko.potrosnja <- read_csv(file = 'podatki/ekoloska_potrosnja.csv', skip=1,
                           locale=locale(grouping_mark=".", encoding="Windows-1250"),
                           col_names = c("A", "Drzava", "Leto", "B", "Izdatki.za.ekologijio"),
-                          na = c(":", " ", "", "-"))
+                          na=c(":", " ", "", "-"))
 
 eko.potrosnja <- eko.potrosnja[, c(-1, -4)]
 eko.potrosnja <- eko.potrosnja  %>% 
@@ -107,10 +107,10 @@ eko.potrosnja$Izdatki.za.ekologijio <- as.numeric(eko.potrosnja$Izdatki.za.ekolo
 
 
 #5. TABELA: ŠTEVILO PREBIVALCEV (1960-2018)==========================================================================
-populacija <- read_csv('podatki/populacija.csv', skip = 1,
+populacija <- read_csv('podatki/populacija.csv', skip=1,
                        locale=locale(grouping_mark=".", encoding="Windows-1250"),
                        col_names = c("A", "Drzava", "Leto", "B", "C", "Stevilo.prebivalcev"),
-                       na = c(":", " ", "", "-"))
+                       na=c(":", " ", "", "-"))
 populacija <- populacija %>% filter(B == "Total")
 
 populacija <- populacija [, c(-1, -4, -5)]
@@ -135,10 +135,10 @@ populacija$Stevilo.prebivalcev <- as.numeric(populacija$Stevilo.prebivalcev)
 
 
 #6. TABELA: Pobrani davki s strani ekoloških dajatev (v miljonih evrov) (1995-2017)===================================
-eko.davki <- read_csv(file = 'podatki/ekoloski_davki.csv', skip = 1,
+eko.davki <- read_csv(file='podatki/ekoloski_davki.csv', skip=1,
                       locale=locale(grouping_mark=".", encoding="Windows-1250"),
                       col_names = c("A", "Drzava", "Leto", "B", "Pobrani.davki"),
-                      na = c(":", " ", "", "-"))
+                      na=c(":", " ", "", "-"))
 
 eko.davki <- eko.davki  %>% 
   filter(Pobrani.davki != "") %>% 
@@ -164,9 +164,9 @@ eko.davki$Pobrani.davki <- as.numeric(eko.davki$Pobrani.davki)
 
 
 #IZVOZ TABEL (Tidy Data)=====================================================================================
-write.csv2(bdp,'podatki/tidy_BDP.csv', fileEncoding = 'UTF-8')
-write.csv2(gozd, 'podatki/tidy_gozd.csv', fileEncoding = 'UTF-8')
-write.csv2(populacija,'podatki/tidy_populacija.csv', fileEncoding = 'UTF-8')
-write.csv2(eko.potrosnja,'podatki/tidy_ekoloska_potrosnja.csv', fileEncoding = 'UTF-8')
-write.csv2(eko.davki,'podatki/tidy_ekoloski_davki.csv', fileEncoding = 'UTF-8')
-write.csv2(emisije,'podatki/tidy_emisije.csv', fileEncoding = 'UTF-8')
+write.csv2(bdp,'podatki/tidy_BDP.csv', fileEncoding='UTF-8')
+write.csv2(gozd, 'podatki/tidy_gozd.csv', fileEncoding='UTF-8')
+write.csv2(populacija,'podatki/tidy_populacija.csv', fileEncoding='UTF-8')
+write.csv2(eko.potrosnja,'podatki/tidy_ekoloska_potrosnja.csv', fileEncoding='UTF-8')
+write.csv2(eko.davki,'podatki/tidy_ekoloski_davki.csv', fileEncoding='UTF-8')
+write.csv2(emisije,'podatki/tidy_emisije.csv', fileEncoding='UTF-8')

@@ -73,7 +73,7 @@ Sprva so bili podatki v šestih tabelah, ki sem jih uredil v šest razpredelnic 
 
 
 ```{r vizualizacija, echo=FALSE, message=FALSE, results='hide', warning=FALSE}
-source('vizualizacija/vizualizacija.r', encoding = 'UTF-8')
+source('vizualizacija/vizualizacija.r', encoding='UTF-8')
 ```
 
 
