@@ -29,10 +29,11 @@ emisije <- read_csv('podatki/emisije.csv', na=c(":", " ", "", "-"), skip=1,
                     col_names=c("Enota", "Drzava", "Leto", "Merjen.plin",
                                 "Sector.gospodarstva", "Izpuscene.emisije"))
 
-emisije %>% group_by(Drzava, Leto, Sector.gospodarstva) %>% 
+emisije <- emisije %>% 
+  group_by(Drzava, Leto, Sector.gospodarstva) %>%
   summarise(Skupne.emisije=sum(Izpuscene.emisije, na.rm=TRUE))
 
-emisije <- emisije  %>% 
+emisije <- emisije  %>%
   filter(Leto >= 1998 & Leto <= 2017) %>%
   filter(Drzava != "European Union - 28 countries" &
            Drzava != "European Union - 28 countries" &
@@ -50,28 +51,28 @@ emisije$Drzava <- gsub('^Germany.*', 'Germany', emisije$Drzava)
 emisije$Drzava <- gsub('^Kosovo.*', 'Kosovo', emisije$Drzava)
 emisije$Izpuscene.emisije <- as.numeric(emisije$Izpuscene.emisije)
 
-
-metan <- emisije %>% filter(Merjen.plin == "Methane")
-metan <- metan[,-4]
-co.2 <- emisije %>% filter(Merjen.plin == "Carbon dioxide")
-co.2 <- co.2[,-4]
-no.2 <- emisije %>% filter(Merjen.plin == "Nitrous oxide")
-no.2 <- no.2[,-4]
-
-skupno.plini <- inner_join(metan, co.2, by = c("Drzava", "Leto", "Sector.gospodarstva"))
-skupno.plini <- inner_join(skupno.plini, no.2, by = c("Drzava", "Leto", "Sector.gospodarstva"))
-skupno.plini$skupne.emisije <- skupno.plini$Izpuscene.emisije.x + 
-  skupno.plini$Izpuscene.emisije.y + skupno.plini$Izpuscene.emisije
-skupno.plini <- skupno.plini %>% filter(Sector.gospodarstva == 'Total - all NACE activities')
-skupno.plini <- skupno.plini[, c(-(4:9), -1)]
-
-# ---DFSFDGFRGRVBFDVSGVRTFEDGFTREWGEWFDEDS
-plini.sektorji <- inner_join(metan, co.2, by = c("Drzava", "Leto", "Sector.gospodarstva"))
-plini.sektorji <- inner_join(plini.sektorji, no.2, by = c("Drzava", "Leto", "Sector.gospodarstva"))
-plini.sektorji$skupne.emisije <- plini.sektorji$Izpuscene.emisije.x + 
-  plini.sektorji$Izpuscene.emisije.y + plini.sektorji$Izpuscene.emisije
-plini.sektorji <- plini.sektorji[, c(-(5:9), -1)]
-
+# 
+# metan <- emisije %>% filter(Merjen.plin == "Methane")
+# metan <- metan[,-4]
+# co.2 <- emisije %>% filter(Merjen.plin == "Carbon dioxide")
+# co.2 <- co.2[,-4]
+# no.2 <- emisije %>% filter(Merjen.plin == "Nitrous oxide")
+# no.2 <- no.2[,-4]
+# 
+# skupno.plini <- inner_join(metan, co.2, by = c("Drzava", "Leto", "Sector.gospodarstva"))
+# skupno.plini <- inner_join(skupno.plini, no.2, by = c("Drzava", "Leto", "Sector.gospodarstva"))
+# skupno.plini$skupne.emisije <- skupno.plini$Izpuscene.emisije.x + 
+#   skupno.plini$Izpuscene.emisije.y + skupno.plini$Izpuscene.emisije
+# skupno.plini <- skupno.plini %>% filter(Sector.gospodarstva == 'Total - all NACE activities')
+# skupno.plini <- skupno.plini[, c(-(4:9), -1)]
+# 
+# # ---DFSFDGFRGRVBFDVSGVRTFEDGFTREWGEWFDEDS
+# plini.sektorji <- inner_join(metan, co.2, by = c("Drzava", "Leto", "Sector.gospodarstva"))
+# plini.sektorji <- inner_join(plini.sektorji, no.2, by = c("Drzava", "Leto", "Sector.gospodarstva"))
+# plini.sektorji$skupne.emisije <- plini.sektorji$Izpuscene.emisije.x +
+#   plini.sektorji$Izpuscene.emisije.y + plini.sektorji$Izpuscene.emisije
+# plini.sektorji <- plini.sektorji[, c(-(5:9), -1)]
+# 
 
 
 
