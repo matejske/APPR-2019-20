@@ -174,4 +174,11 @@ shinyAppDir("shiny", options=list(width="100%", height=720))
 ***
 # 6. Zaključek
 
-Iz dane analize, lahko vidimo, da se ekološke situacije v državah EU začenjajo izboljševati. V analizi sem sicer vzel zgolj države EU, kar je v posameznih segmentih lahko premalo, sploh ker je globalno segrevanje problem celotnega planeta. A vseeno sem iz podatkov za Evropsko unijo lahko ugotovil precej zanimivih stvari. Iz zgleda preteklih dogodkov v Sloveniji lahko vidimo, kako pozitivno vpliva zvišanje eko-davkov na zmanjšanje vrednosti emisij. V večih segmentih analize je izstopala Švedska, ki je lahko zgled ostalim državam. Iz napovedi za prihodnja leta lahko sklepamo na povečanje izdatkov za ohranjanje okolja vseh držav, saj morajo prav pri problemu globalnega segrevanja stopiti skupaj in delovati kot celota preden bo prepozno.
+* Item 1
+* Item
+
+Iz dane analize, lahko vidimo, da se ekološke situacije v državah EU začenjajo izboljševati. V analizi sem sicer vzel zgolj države EU, kar je v posameznih segmentih lahko premalo, sploh ker je globalno segrevanje problem celotnega planeta. A vseeno sem iz podatkov za Evropsko unijo lahko ugotovil precej zanimivih stvari:
+
+* iz zgleda preteklih dogodkov v Sloveniji lahko vidimo, kako pozitivno vpliva zvišanje eko-davkov na zmanjšanje vrednosti emisij,
+* v večih segmentih analize je izstopala Švedska, ki je lahko zgled ostalim državam,
+* iz napovedi za prihodnja leta lahko sklepamo na povečanje izdatkov za ohranjanje okolja vseh držav, saj morajo prav pri problemu globalnega segrevanja stopiti skupaj in delovati kot celota preden bo prepozno.
