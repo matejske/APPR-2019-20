@@ -1,10 +1,9 @@
 #=========================================================================================================
 #Graf skupnih emisij v Sloveniji v letih 2008-2017
-emisije.slo <- emisije %>% 
-  filter(Drzava == "Slovenia" & Leto >= 2008) %>%
-  transform(skupne.emisije = round(skupne.emisije / 1000000, 4))
-
-graf.emisije.slo <- ggplot(emisije.slo, aes(x = Leto, y = skupne.emisije)) + 
+graf.emisije.slo <- ggplot((emisije.slo <- emisije %>% 
+                              filter(Drzava == "Slovenia" & Leto >= 2008 & Sector.gospodarstva == "Total - all NACE activities") %>%
+                              transform(skupne.emisije = round(skupne.emisije / 1000000, 4))),
+                           aes(x = Leto, y = skupne.emisije)) + 
   geom_line(colour = "royalblue", size = 1.5) +
   geom_point(colour = "#000000", size = 2.5) + 
   theme_minimal() +
@@ -12,7 +11,7 @@ graf.emisije.slo <- ggplot(emisije.slo, aes(x = Leto, y = skupne.emisije)) +
   ylab("Vrednosti emisij v megatonah") +
   theme(plot.title = element_text(hjust = 0.5, size = 15, face = "bold")) + 
   scale_x_continuous("Leto", labels = as.character(emisije.slo$Leto), breaks = emisije.slo$Leto)
-# plot(graf.emisije.slo)
+plot(graf.emisije.slo)
 
 
 #Graf ekodavkov Slovenije v letih 2008-2017=============================================================
@@ -59,13 +58,8 @@ europe <- svet %>% filter(CONTINENT == "Europe") %>%
   filter(NAME != "Jersey") %>%
   filter(NAME != "Russia")
 
+colnames(europe)[26] <- 'Drzava'
 europe$NAME <- as.character(europe$NAME)
-
-
-#Drzave v zemljevidu "europe"
-drzave <- sort(unique(europe$NAME))
-drzave <- as.data.frame(drzave, stringsAsFactors=FALSE)
-names(drzave) <- "Drzava"
 
 
 #Zemljevid evropskih drzav v letu 2017 (obarvane glede na velikost BDP)====================================
@@ -105,11 +99,11 @@ zemljevid.izdatki.v.bdp.2016 <- ggplot() +
 # plot(zemljevid.izdatki.v.bdp.2016)
 
 
-#Razvrščanje (Cluster) ==================================================================================================
+# Razvrščanje (Cluster) ==================================================================================================
 ##Podobnosti med državami glede na letni BDP in izpuščene emisije
 podobnosti <- dcast(bdp, Drzava~Leto, value.var = 'BDP.E')
 priprava.plini <- emisije %>% 
-  filter(Leto > 2007) %>% 
+  filter(Leto > 2007 & Sector.gospodarstva == "Total - all NACE activities") %>% 
   dcast(Drzava ~ Leto, value.var = 'skupne.emisije')
 podobnosti <- right_join(podobnosti, priprava.plini, by=c('Drzava'))
 
@@ -126,13 +120,13 @@ zemljevid.cluster <- ggplot() +
   guides(fill=guide_legend(title='Skupine')) + 
   ggtitle('Razvrščanje držav glede na letni BDP \nin izpuščene emisije') + 
   theme(plot.title = element_text(hjust = 0.5, size = 15, face = "bold"))
-# print(zemljevid.cluster)
+print(zemljevid.cluster)
 
 #Plotly=========================================================================================================
 ##Plotly: Pobrani davki in izmerjene vrednosti emisij
 plotly.tabela <- inner_join(eko.davki, emisije, by = c('Drzava','Leto'))
 plotly.tabela <- plotly.tabela %>% 
-  filter(Leto >= "2008") %>%
+  filter(Leto >= "2008" & Sector.gospodarstva == "Total - all NACE activities") %>%
   transform(skupne.emisije = skupne.emisije / 1000000) %>%
   transform(Pobrani.davki = Pobrani.davki / 1000)
 
@@ -144,7 +138,7 @@ plotly.graf2 <- ggplot(data = plotly.tabela, aes(x=Pobrani.davki, y=skupne.emisi
   theme(legend.position = "none")
 
 plotly.graf2 <- ggplotly(plotly.graf2, dynamicTics=TRUE, width = 900)
-# print(plotly.graf2)
+print(plotly.graf2)
 
 
 # Graf vrednosti emisij glede na kolicino gozda ================================
