@@ -163,42 +163,6 @@ eko.davki$Pobrani.davki <- as.numeric(eko.davki$Pobrani.davki)
 
 
 
-#=IZRAČUNI novih vrednosti in indeksov================================================================================
-#BDP NA PREBIVALCA ----
-bdp.pc <- inner_join(bdp, populacija, by=c("Drzava", "Leto"))
-bdp.pc <- transform(bdp.pc, bdp.pc.stolpec = round(((BDP.E / Stevilo.prebivalcev) * 1000000), digits = 2))
-bdp.pc <- bdp.pc[,c(-3, -4)]
-
-#KOLICINA EMISIJ vseh SEKTORJEV GLEDE na količino gozda (2017) ----
-gozd.emisije <- inner_join(gozd, emisije, by = "Drzava")
-gozd.emisije <- gozd.emisije %>% 
-  filter(Leto == 2017 & Sector.gospodarstva == "Total - all NACE activities") %>%
-  transform(Emisije.na.povrsino = skupne.emisije / Povrsina.gozda)
-gozd.emisije <- gozd.emisije[,-c(2:5)]
-
-#EMISIJE NA PREBIVALCA (v tonah na prebivalca) ----
-skupne.emisije.pc <- inner_join(emisije, populacija, by=c("Drzava", "Leto"))
-skupne.emisije.pc <- transform(skupne.emisije.pc, Emisije.na.prebivalca = skupne.emisije / Stevilo.prebivalcev)
-skupne.emisije.pc <- skupne.emisije.pc[,c(-3, -4)]
-
-#IZDATKI ZA EKOLOGIJO V BDP ----
-ekoizdatki.v.bdp <- inner_join(bdp, eko.potrosnja, by=c("Drzava", "Leto"))
-ekoizdatki.v.bdp <- transform(ekoizdatki.v.bdp, ekoizdatki.v.bdp.stolpec = 
-                                round((Izdatki.za.ekologijio / BDP.E), digits = 4))
-ekoizdatki.v.bdp <- ekoizdatki.v.bdp[,c(-3,-4)]
-
-#IZDATKI GLEDE NA POBRANE DAVKE ---- 
-ekoizdatki.v.davkih <- inner_join(eko.potrosnja, eko.davki, by=c("Drzava", "Leto"))
-ekoizdatki.v.davkih <- transform(ekoizdatki.v.davkih, ekoizdatki.v.davkih.stolpec = 
-                                   round((Izdatki.za.ekologijio / Pobrani.davki), digits = 4))
-ekoizdatki.v.davkih <- ekoizdatki.v.davkih[,c(-3,-4)]
-
-#EMISIJE V BDP ----
-emisije.v.bdp <- inner_join(emisije, bdp, by=c("Drzava", "Leto"))
-emisije.v.bdp <- transform(emisije.v.bdp, emisije.v.bdp.stolpec = round(skupne.emisije / BDP.E, 4))
-emisije.v.bdp <- emisije.v.bdp[, c(-4, -3)]
-
-
 #IZVOZ TABEL (Tidy Data)=====================================================================================
 write.csv2(bdp,'podatki/tidy_BDP.csv', fileEncoding = 'UTF-8')
 write.csv2(gozd, 'podatki/tidy_gozd.csv', fileEncoding = 'UTF-8')
@@ -206,4 +170,3 @@ write.csv2(populacija,'podatki/tidy_populacija.csv', fileEncoding = 'UTF-8')
 write.csv2(eko.potrosnja,'podatki/tidy_ekoloska_potrosnja.csv', fileEncoding = 'UTF-8')
 write.csv2(eko.davki,'podatki/tidy_ekoloski_davki.csv', fileEncoding = 'UTF-8')
 write.csv2(emisije,'podatki/tidy_emisije.csv', fileEncoding = 'UTF-8')
-

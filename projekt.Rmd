@@ -39,7 +39,7 @@ source("uvoz/uvoz.r", encoding="UTF-8")
 ```
 
 Podatke sem uvozil v obliki HTML in CSV, ki sem jih pridobil na spletni strani [World atlas](https://www.worldatlas.com/articles/european-countries-with-the-most-forest-cover.html) in v podatkovnih bazah Eurostat-a.
-Sprva so bili podatki v sedmih tabelah, ki sem jih uredil v sedem razpredelnic v obliki *tidy data*:
+Sprva so bili podatki v šestih tabelah, ki sem jih uredil v šest razpredelnic v obliki *tidy data*:
 
 1. `bdp` - podatki o bruto domačem proizvodu (BDP) držav Evropske unije (1998-2017)
   - `Drzava` - - spremenljivka: imena opazovanih držav, (neurejen faktor)
@@ -49,30 +49,24 @@ Sprva so bili podatki v sedmih tabelah, ki sem jih uredil v sedem razpredelnic v
 2. `emisije` - letne meritve  treh najškodljivejših toplogrednih plinov v ozračju po sektorjih gospodarstva 
   - `Drzava` - spremenljivka: imena opazovanih držav, (neurejen faktor)
   - `Leto` - spremenljivka: leto testiranja, (število)
-  - `Merjen.plin` - spremenljivka: vrsta plina (Carbon dioxide, Carbon dioxide, Nitrous oxide), (neurejen faktor)
   - `Sector.gospodarstva` - spremenljivka: sektor gospodarstva, ki je v zrak izpustil določeno količino plina, (neurejen faktor)
-  - `Izpuscene.emisije` - meritev: letna izmerjena količina v tonah, (število)
+  - `skupne.emisije` - meritev: letna izmerjena količina v tonah, (število)
 
 3. `gozd` - površina gozdnatih površin v kvadratnih kilometrih v letu 2017
   - `Drzava` - spremenljivka: imena opazovanih držav, (neurejen faktor)
   - `Povrsina.gozda` - meritev: skupna površina v kvadratnih kilometrih, (število)
 
-4. `dolg` - konsolidirani državni dolg Konsolidirani državni dolg (1998-2017)
-  - `Drzava` - spremenljivka: imena opazovanih držav, (neurejen faktor)
-  - `Leto` - spremenljivka: leto testiranja, (število)
-  - `Dolg` - meritev: vrednost dolga v milijonih evrov, (število)
-
-5. `eko.potrosnja` - letni državni izdatki za ekologijo (1998-2017)
+4. `eko.potrosnja` - letni državni izdatki za ekologijo (1998-2017)
   - `Drzava` - spremenljivka: imena opazovanih držav, (neurejen faktor)
   - `Leto` - spremenljivka: leto testiranja, (število)
   - `Izdatki.za.ekologijio` - meritev: izdatki (potrošnja) držav za ekologijo v milijonih evrov, (število)
   
-6. `populacija` - število prebivalcev držav Evropske unije (1998-2017)
+5. `populacija` - število prebivalcev držav Evropske unije (1998-2017)
   - `Drzava` - spremenljivka: imena opazovanih držav, (neurejen faktor)
   - `Leto` - spremenljivka: leto testiranja, (število)
   - `Stevilo.prebivalcev` - meritev: število prebivalcev, (število)
 
-7. `eko.davki` - letni državni prihodki s strani ekoloških davkov za podjetja in posameznike
+6. `eko.davki` - letni državni prihodki s strani ekoloških davkov za podjetja in posameznike
   - `Drzava` - spremenljivka: imena opazovanih držav, (neurejen faktor)
   - `Leto` - spremenljivka: leto testiranja, (število)
   - `Pobrani.davki` - meritev: vrednost pobranih ekoloških davkov v milijonih evrov, (število)
