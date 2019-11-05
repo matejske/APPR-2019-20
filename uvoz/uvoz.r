@@ -31,7 +31,7 @@ emisije <- read_csv('podatki/emisije.csv', na=c(":", " ", "", "-"), skip=1,
 
 emisije <- emisije %>% 
   group_by(Drzava, Leto, Sector.gospodarstva) %>%
-  summarise(Skupne.emisije=sum(Izpuscene.emisije, na.rm=TRUE))
+  summarise(skupne.emisije=sum(Izpuscene.emisije, na.rm=TRUE))
 
 emisije <- emisije  %>%
   filter(Leto >= 1998 & Leto <= 2017) %>%
@@ -49,7 +49,7 @@ emisije <- emisije  %>%
 
 emisije$Drzava <- gsub('^Germany.*', 'Germany', emisije$Drzava)
 emisije$Drzava <- gsub('^Kosovo.*', 'Kosovo', emisije$Drzava)
-emisije$Izpuscene.emisije <- as.numeric(emisije$Izpuscene.emisije)
+emisije$skupne.emisije <- as.numeric(emisije$skupne.emisije)
 
 # 
 # metan <- emisije %>% filter(Merjen.plin == "Methane")
@@ -222,7 +222,7 @@ bdp.pc <- transform(bdp.pc, bdp.pc.stolpec = round(((BDP.E / Stevilo.prebivalcev
 bdp.pc <- bdp.pc[,c(-3, -4)]
 
 #KOLICINA EMISIJ vseh SEKTORJEV GLEDE na količino gozda (2017) ----
-gozd.emisije <- inner_join(gozd, plini.sektorji, by = "Drzava")
+gozd.emisije <- inner_join(gozd, emisije, by = "Drzava")
 gozd.emisije <- gozd.emisije %>% 
   filter(Leto == 2017 & Sector.gospodarstva == "Total - all NACE activities") %>%
   transform(Emisije.na.povrsino = skupne.emisije / Povrsina.gozda)
@@ -237,7 +237,7 @@ dolg.v.bdp <- dolg.v.bdp[,c(-3, -4)]
 
 
 #EMISIJE NA PREBIVALCA (v tonah na prebivalca) ----
-skupne.emisije.pc <- inner_join(skupno.plini, populacija, by=c("Drzava", "Leto"))
+skupne.emisije.pc <- inner_join(emisije, populacija, by=c("Drzava", "Leto"))
 skupne.emisije.pc <- transform(skupne.emisije.pc, Emisije.na.prebivalca = skupne.emisije / Stevilo.prebivalcev)
 skupne.emisije.pc <- skupne.emisije.pc[,c(-3, -4)]
 
@@ -256,7 +256,7 @@ ekoizdatki.v.davkih <- transform(ekoizdatki.v.davkih, ekoizdatki.v.davkih.stolpe
 ekoizdatki.v.davkih <- ekoizdatki.v.davkih[,c(-3,-4)]
 
 #EMISIJE V BDP ----
-emisije.v.bdp <- inner_join(skupno.plini, bdp, by=c("Drzava", "Leto"))
+emisije.v.bdp <- inner_join(emisije, bdp, by=c("Drzava", "Leto"))
 emisije.v.bdp <- transform(emisije.v.bdp, emisije.v.bdp.stolpec = round(skupne.emisije / BDP.E, 4))
 emisije.v.bdp <- emisije.v.bdp[, c(-4, -3)]
 

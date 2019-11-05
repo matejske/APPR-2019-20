@@ -8,7 +8,7 @@ shinyUI(fluidPage(
     sidebarPanel(width = 7,
       selectInput("sektor", 
                   "Izberi sektor gospodarstva",
-                  choices = unique(plini.sektorji$Sector.gospodarstva)),
+                  choices = unique(emisije$Sector.gospodarstva)),
       sliderInput("leto", 
                   "Izberi leto", 
                   min = 2008, max = 2017, value = 2008, step=1, 
