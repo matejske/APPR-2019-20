@@ -116,7 +116,7 @@ Najbolj (v negativnem smislu) izstopa Irska, med tiste z najvišji indeksi pa se
 plot(zemljevid.izdatki.v.bdp.2016)
 ```
 
-## 3.3. Korelacija med ekološkimi davki in vrednostjo emisij (2008-2017), Plotly
+## 3.3. Korelacija med ekološkimi davki in vrednostjo emisij (2008-2017)
 Spodnji interaktivni diagram prikazuje spreminjanje vrednosti pobranih ekoloških davkov v milijardah evrov in količine emisij v megatonah od 2008 do 2017.
 ```{r plotly.graf2, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=7, fig.cap= 'Podobnosti med državami glede na vrednost emisij in pobrane davke'}
 plotly.graf2
@@ -126,10 +126,9 @@ plotly.graf2
 ## 3.4. Razvrščanje držav glede na BDP in izpuščene emisije
 Zanimalo me je katere države so si med seboj podobne glede na izpuščene emisije in BDP. Zato sem jih na grupiral v pet skupin, kar je lepo razvidno na spodnjem zemljevidu. Opazimo lahko, da ponovno izstopa Nemčija, kateri glede na analizirane podatke ni podobne države. Največjo skupino sestavljajo države označene z roza barvo (jugovzhodna Evropa in Skandinavija).
 
-```{r zemljevid.cluster, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=6.5}
+```{r zemljevid.cluster, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center', fig.height=6.5, fig.cap="Opomba: Na zemlejvidu so s sivo barvo prikazane države, za katere na Eurostatu ni bilo podatkov o BDP oz. izpuščenih emisijah (to so Albanija, Bosna in Hercegovina, Češka, Črna Gora, Kosovo, Severna Makedonija, Srbija in ostale vzhodnoevropske države, ki jih nasploh ni v Eurostatovi bazi)."}
 print(zemljevid.cluster)
 ```
-
 ## 3.5. Vrednost emisij glede na površino gozdnatih površin
 V analizi sem pogledal tudi, kako se je ekosistem posameznih držav sposoben samoobnavljati. Pomembno informacijo o tem lahko dobimo iz površine gozdnatih površin posamezne države, saj so ravno rastline tiste, ki ogljikov dioksid porablajo za fotosintezo in nato sproščajo kisik. Zato sem primerjal vrednosti sproščenih emisij v ozračje s površino gozda v posamezni državi. 
 
@@ -164,7 +163,7 @@ plot(graf.napovedi.praga.nem)
 ```
 
 ***
-# 5. Shiny
+# 5. Interaktivni vmesnik
 Za interaktivno vizualizacijo podatkov sem naredil shiny aplikacijo, ki prikazuje še en pomemben kazalnik. Skozi leta sem prikazal gibanje vrednosti emisij na prebivalca.
 
 ```{r shiny, echo=FALSE}

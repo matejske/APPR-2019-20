@@ -129,8 +129,8 @@ priprava.plini <- emisije %>%
   dcast(Drzava ~ Leto, value.var='skupne.emisije')
 podobnosti <- right_join(podobnosti, priprava.plini, by=c('Drzava'))
 
-podobnosti.a <- podobnosti[,-1]
-fit <- hclust(dist(scale(podobnosti.a)))
+podobnosti.rezan <- podobnosti[,-1]
+fit <- hclust(dist(scale(podobnosti.rezan)))
 skupine2 <- cutree(fit, 5)
 
 cluster2 <- mutate(podobnosti, skupine2)
@@ -142,7 +142,7 @@ zemljevid.cluster <- ggplot() +
   theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank(), 
         panel.background = element_blank()) + 
   guides(fill=guide_legend(title='Skupine')) + 
-  ggtitle('Razvrščanje držav glede na letni BDP \nin izpuščene emisije') + 
+  ggtitle("Razvrščanje držav glede na letni BDP \nin izpuščene emisije") + 
   theme(plot.title = element_text(hjust=0.5, size=15, face="bold"))
 
 # print(zemljevid.cluster)
@@ -207,5 +207,5 @@ zemljevid.leto <- function(letnica, sektor="Total - all NACE activities") {
           axis.text=element_blank(), 
           axis.ticks=element_blank(), 
           panel.background=element_blank()) + 
-    scale_fill_gradient(low="#32CD32", high="#8b4513")
+    scale_fill_gradient(low="#32CD32", high="#8b4513", limits=c(0,100))
 }
