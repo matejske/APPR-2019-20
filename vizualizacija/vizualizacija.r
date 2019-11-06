@@ -37,7 +37,7 @@ graf.davki.slo <- ggplot(davki.slovenije, aes(x=Leto, y=Pobrani.davki)) +
 
 # 3. Indeks emisij držav glede na BDP v letu 2017 ==============================================================
 ## Izracun ----
-emisije.v.bdp <- inner_join(emisije, bdp, by=c("Drzava", "Leto"))
+emisije.v.bdp <- inner_join(emisije, bdp, by=c("Drzava", "Leto")) %>% filter(skupne.emisije != "0")
 emisije.v.bdp <- transform(emisije.v.bdp, emisije.v.bdp.stolpec = round(skupne.emisije / BDP.E, 4))
 emisije.v.bdp <- emisije.v.bdp[, c(-4, -3)]
 
@@ -190,7 +190,7 @@ graf.gozd.emisije <- ggplot(gozd.emisije.graf,
   theme(axis.text.x=element_text(angle=90, hjust=1, vjust=0.5)) +
   theme(plot.title = element_text(hjust=0.5, size=15, face="bold"))
 
-plot(graf.gozd.emisije)
+# plot(graf.gozd.emisije)
 
 
 # 10. FUNKCIJA ZA SHINY==============================================================================================
