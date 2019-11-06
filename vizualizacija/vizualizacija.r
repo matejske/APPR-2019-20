@@ -20,7 +20,8 @@ graf.emisije.slo <- ggplot(data=emisije.slo,
 
 #2. Graf ekodavkov Slovenije v letih 2008-2017=============================================================
 ## Izracun ----
-davki.slovenije <- eko.davki %>% filter(Drzava == "Slovenia" & Leto >= 2008)
+davki.slovenije <- eko.davki %>% 
+  filter(Drzava == "Slovenia" & Leto >= 2008)
 
 ## Graf ----
 graf.davki.slo <- ggplot(davki.slovenije, aes(x=Leto, y=Pobrani.davki)) + 
@@ -37,18 +38,16 @@ graf.davki.slo <- ggplot(davki.slovenije, aes(x=Leto, y=Pobrani.davki)) +
 
 # 3. Indeks emisij držav glede na BDP v letu 2017 ==============================================================
 ## Izracun ----
-emisije.v.bdp <- inner_join(emisije, bdp, by=c("Drzava", "Leto")) %>% filter(skupne.emisije != "0")
-emisije.v.bdp <- transform(emisije.v.bdp, emisije.v.bdp.stolpec = round(skupne.emisije / BDP.E, 4))
-emisije.v.bdp <- emisije.v.bdp[, c(-4, -3)]
+emisije.v.bdp <- inner_join(emisije, bdp, by=c("Drzava", "Leto")) %>% 
+  filter(skupne.emisije != "0" & is.na(skupne.emisije) == FALSE & Leto == 2017 & Sector.gospodarstva == "Total - all NACE activities") %>%
+  transform(emisije.v.bdp.stolpec = round(skupne.emisije / BDP.E, 4)) %>%
+  select(Drzava, emisije.v.bdp.stolpec)
 
 ## Graf ----
-emisije.v.bdp.2017 <- emisije.v.bdp %>% 
-  filter(Leto == 2017 & is.na(emisije.v.bdp.stolpec) == FALSE & emisije.v.bdp.stolpec != "0")
-
-graf.emisije.v.bdp.2017 <- ggplot(emisije.v.bdp.2017, 
+graf.emisije.v.bdp.2017 <- ggplot(emisije.v.bdp, 
                                   aes(x=reorder(Drzava, emisije.v.bdp.stolpec),
                                       y=emisije.v.bdp.stolpec,
-                                      fill=factor(ifelse(emisije.v.bdp.2017$Drzava=="Slovenia","T","F")))) + 
+                                      fill=factor(ifelse(emisije.v.bdp$Drzava=="Slovenia","T","F")))) + 
   geom_bar(stat="identity", show.legend=FALSE) +
   scale_fill_manual(name="emisije.v.bdp.2017$Drzava", values=c("royalblue","red")) +
   xlab("Države") + 
@@ -65,12 +64,10 @@ source("lib/uvozi.zemljevid.r")
 svet <- uvozi.zemljevid("https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_countries.zip", 
                         "ne_50m_admin_0_countries", encoding = "utf-8") %>% fortify()
 
-
 # Skrcitev na zemljevid Evrope
 europe <- svet %>% filter(CONTINENT == "Europe") %>% 
   filter(long < 55 & long > -25 & lat > 35 & lat < 72) %>%
-  filter(NAME != "Jersey") %>%
-  filter(NAME != "Russia")
+  filter(NAME != "Jersey" & NAME != "Russia")
 
 # Ureditev tabele 'europe'
 colnames(europe)[26] <- 'Drzava'
@@ -78,11 +75,15 @@ europe$NAME <- as.character(europe$NAME)
 
 
 #5. Zemljevid evropskih drzav v letu 2017 (obarvane glede na velikost BDP)====================================
+## Izracun ----
+bdp.2017 <- bdp %>% 
+  filter(Leto == 2017) %>% 
+  transform(BDP.E = BDP.E / 1000000) %>%
+  right_join(europe, by=c("Drzava"="NAME"))
+
+## Zemljevid ----
 zemljevid.bdp.2017 <- ggplot() + 
-  geom_polygon(data=bdp %>% 
-                 filter(Leto == 2017) %>% 
-                 transform(BDP.E = BDP.E / 1000000) %>%
-                 right_join(europe, by=c("Drzava"="NAME")), aes(x=long, y=lat, group=group, fill=BDP.E)) + 
+  geom_polygon(data=bdp.2017, aes(x=long, y=lat, group=group, fill=BDP.E)) + 
   theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank(), 
         panel.background = element_blank()) + 
   scale_fill_gradient(high="#001933", low="#cce5ff") +
@@ -98,8 +99,7 @@ zemljevid.bdp.2017 <- ggplot() +
 
 #6. Zemljevid INDEKSA eko-izdatkov glede na BDP (2016)==============================================================
 ## Izracun ----
-ekoizdatki.v.bdp <- inner_join(bdp, eko.potrosnja, by=c("Drzava", "Leto"))
-ekoizdatki.v.bdp <- ekoizdatki.v.bdp %>% 
+ekoizdatki.v.bdp <- inner_join(bdp, eko.potrosnja, by=c("Drzava", "Leto")) %>% 
   transform(ekoizdatki.v.bdp.stolpec = round((Izdatki.za.ekologijio / BDP.E), digits=4)) %>%
   filter(Leto == 2016) %>% 
   right_join(europe, by=c("Drzava"="NAME"))
@@ -118,7 +118,8 @@ zemljevid.izdatki.v.bdp.2016 <- ggplot() +
         legend.position="right") +
   scale_fill_gradient(high="#B2FF66", low="#193300")
 
-#plot(zemljevid.izdatki.v.bdp.2016)
+# plot(zemljevid.izdatki.v.bdp.2016)
+
 
 # 7. Razvrščanje (Cluster) ==================================================================================================
 ##Podobnosti med državami glede na letni BDP in izpuščene emisije
@@ -148,12 +149,13 @@ zemljevid.cluster <- ggplot() +
 
 
 # 8. Plotly: Pobrani davki in izmerjene vrednosti emisij ================================================
-plotly.tabela <- inner_join(eko.davki, emisije, by=c('Drzava','Leto'))
-plotly.tabela <- plotly.tabela %>% 
+## Izracun ----
+plotly.tabela <- inner_join(eko.davki, emisije, by=c('Drzava','Leto')) %>% 
   filter(Leto >= "2008" & Sector.gospodarstva == "Total - all NACE activities") %>%
   transform(skupne.emisije = skupne.emisije / 1000000) %>%
   transform(Pobrani.davki = Pobrani.davki / 1000)
 
+## Graf
 plotly.graf2 <- ggplot(data=plotly.tabela, aes(x=Pobrani.davki, y=skupne.emisije, color=Drzava)) +
   geom_point(aes(frame=Leto)) + 
   scale_x_continuous() +
@@ -168,20 +170,18 @@ plotly.graf2 <- ggplotly(plotly.graf2, dynamicTics=TRUE, width=900)
 
 # 9. Graf KOLICINE EMISIJ VSEH SEKTORJEV GLEDE na povrsino gozda (2017) ===============================
 ## Izracun ----
-gozd.emisije <- inner_join(gozd, emisije, by="Drzava")
-gozd.emisije <- gozd.emisije %>% 
-  filter(Leto == 2017 & Sector.gospodarstva == "Total - all NACE activities" & skupne.emisije != "0") %>%
-  transform(Emisije.na.povrsino = skupne.emisije / Povrsina.gozda)
-gozd.emisije <- gozd.emisije[,-c(2:5)]
+gozd.emisije <- inner_join(gozd, emisije, by="Drzava") %>% 
+  transform(Emisije.na.povrsino = skupne.emisije / Povrsina.gozda) %>%
+  filter(Leto == 2017 & Sector.gospodarstva == "Total - all NACE activities") %>%
+  filter(skupne.emisije != "0" & is.na(Emisije.na.povrsino) == FALSE) %>%
+  filter(Drzava != "Malta" & Drzava != "Netherlands") %>%
+  select(Drzava, Emisije.na.povrsino)
 
 ## Graf ----
-gozd.emisije.graf <- gozd.emisije %>% filter(is.na(Emisije.na.povrsino) == FALSE &
-                                               Drzava != "Malta" &
-                                               Drzava != "Netherlands")
-graf.gozd.emisije <- ggplot(gozd.emisije.graf, 
+graf.gozd.emisije <- ggplot(gozd.emisije, 
                                   aes(x = reorder(Drzava, Emisije.na.povrsino),
                                       y = Emisije.na.povrsino,
-                                      fill=factor(ifelse(gozd.emisije.graf$Drzava == "Slovenia","T","F")))) + 
+                                      fill=factor(ifelse(gozd.emisije$Drzava == "Slovenia","T","F")))) + 
   geom_bar(stat="identity", show.legend=FALSE) +
   scale_fill_manual(name = "gozd.emisije$Drzava", values=c("#66CC00","red")) +
   xlab("Države") + 
