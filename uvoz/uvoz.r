@@ -51,7 +51,7 @@ emisije$skupne.emisije <- as.numeric(emisije$skupne.emisije)
 
 
 
-# 3. TABELA: Pokritost držav z gozdom (v 1000 ha -> km^2) =============================
+# 3. TABELA: Pokritost držav z gozdom (v 1000 ha -> km^2) (2017)=============================
 uvozi.gozd <- function(){
   link <- "https://www.worldatlas.com/articles/european-countries-with-the-most-forest-cover.html"
   stran <- html_session(link) %>% read_html()

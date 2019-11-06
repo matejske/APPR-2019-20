@@ -163,7 +163,7 @@ plot(graf.napovedi.praga.nem)
 ```
 
 ***
-# 5. Interaktivni vmesnik
+# 5. Interaktivni vmesnik Shiny
 Za interaktivno vizualizacijo podatkov sem naredil shiny aplikacijo, ki prikazuje še en pomemben kazalnik. Skozi leta sem prikazal gibanje vrednosti emisij na prebivalca.
 
 ```{r shiny, echo=FALSE}

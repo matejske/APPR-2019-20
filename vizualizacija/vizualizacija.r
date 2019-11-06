@@ -194,9 +194,10 @@ graf.gozd.emisije <- ggplot(gozd.emisije,
 
 
 # 10. FUNKCIJA ZA SHINY==============================================================================================
-zemljevid.leto <- function(letnica, sektor="Total - all NACE activities") {
+zemljevid.leto <- function(letnica, sektor) {
   
-  ggplot() + geom_polygon(data=emisije %>% 
+  ggplot() + geom_polygon(data=emisije %>%
+                            filter(Sector.gospodarstva != "Total - all NACE activities") %>%
                             filter(Leto == letnica & Sector.gospodarstva == sektor) %>%
                             right_join(europe, by=c("Drzava"="NAME")) %>%
                             transform(skupne.emisije = round(skupne.emisije / 1000000, 4)),
@@ -207,5 +208,5 @@ zemljevid.leto <- function(letnica, sektor="Total - all NACE activities") {
           axis.text=element_blank(), 
           axis.ticks=element_blank(), 
           panel.background=element_blank()) + 
-    scale_fill_gradient(low="#32CD32", high="#8b4513", limits=c(0,100))
+    scale_fill_gradient(low="#B2FF66", high="#660033", limits=c(0,36))
 }
