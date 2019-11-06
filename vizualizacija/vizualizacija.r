@@ -1,7 +1,11 @@
-#Graf skupnih emisij v Sloveniji v letih 2008-2017 ==================================================
-graf.emisije.slo <- ggplot((emisije.slo <- emisije %>% 
-                              filter(Drzava == "Slovenia" & Leto >= 2008 & Sector.gospodarstva == "Total - all NACE activities") %>%
-                              transform(skupne.emisije = round(skupne.emisije / 1000000, 4))),
+#1. Graf skupnih emisij v Sloveniji v letih 2008-2017 ==================================================
+## Izracun ----
+emisije.slo <- emisije %>% 
+  filter(Drzava == "Slovenia" & Leto >= 2008 & Sector.gospodarstva == "Total - all NACE activities") %>%
+  transform(skupne.emisije = round(skupne.emisije / 1000000, 4))
+
+## Graf ----
+graf.emisije.slo <- ggplot(data=emisije.slo,
                            aes(x=Leto, y=skupne.emisije)) + 
   geom_line(colour="royalblue", size=1.5) +
   geom_point(colour = "#000000", size=2.5) + 
@@ -14,7 +18,7 @@ graf.emisije.slo <- ggplot((emisije.slo <- emisije %>%
 # plot(graf.emisije.slo)
 
 
-#Graf ekodavkov Slovenije v letih 2008-2017=============================================================
+#2. Graf ekodavkov Slovenije v letih 2008-2017=============================================================
 ## Izracun ----
 davki.slovenije <- eko.davki %>% filter(Drzava == "Slovenia" & Leto >= 2008)
 
@@ -31,14 +35,15 @@ graf.davki.slo <- ggplot(davki.slovenije, aes(x=Leto, y=Pobrani.davki)) +
 # plot(graf.davki.slo)
 
 
-# Graf emisij držav glede na BDP v letu 2017 ==============================================================
+# 3. Indeks emisij držav glede na BDP v letu 2017 ==============================================================
 ## Izracun ----
 emisije.v.bdp <- inner_join(emisije, bdp, by=c("Drzava", "Leto"))
 emisije.v.bdp <- transform(emisije.v.bdp, emisije.v.bdp.stolpec = round(skupne.emisije / BDP.E, 4))
 emisije.v.bdp <- emisije.v.bdp[, c(-4, -3)]
 
 ## Graf ----
-emisije.v.bdp.2017 <- emisije.v.bdp %>% filter(Leto == 2017 & is.na(emisije.v.bdp.stolpec) == FALSE)
+emisije.v.bdp.2017 <- emisije.v.bdp %>% 
+  filter(Leto == 2017 & is.na(emisije.v.bdp.stolpec) == FALSE & emisije.v.bdp.stolpec != "0")
 
 graf.emisije.v.bdp.2017 <- ggplot(emisije.v.bdp.2017, 
                                   aes(x=reorder(Drzava, emisije.v.bdp.stolpec),
@@ -55,7 +60,7 @@ graf.emisije.v.bdp.2017 <- ggplot(emisije.v.bdp.2017,
 # plot(graf.emisije.v.bdp.2017)
 
 
-# Uvoz zemljevida sveta==================================================================================
+# 4. Uvoz zemljevida sveta==================================================================================
 source("lib/uvozi.zemljevid.r")
 svet <- uvozi.zemljevid("https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_countries.zip", 
                         "ne_50m_admin_0_countries", encoding = "utf-8") %>% fortify()
@@ -72,9 +77,9 @@ colnames(europe)[26] <- 'Drzava'
 europe$NAME <- as.character(europe$NAME)
 
 
-#Zemljevid evropskih drzav v letu 2017 (obarvane glede na velikost BDP)====================================
+#5. Zemljevid evropskih drzav v letu 2017 (obarvane glede na velikost BDP)====================================
 zemljevid.bdp.2017 <- ggplot() + 
-  geom_polygon(data = bdp %>% 
+  geom_polygon(data=bdp %>% 
                  filter(Leto == 2017) %>% 
                  transform(BDP.E = BDP.E / 1000000) %>%
                  right_join(europe, by=c("Drzava"="NAME")), aes(x=long, y=lat, group=group, fill=BDP.E)) + 
@@ -91,18 +96,18 @@ zemljevid.bdp.2017 <- ggplot() +
 # plot(zemljevid.bdp.2017)
 
 
-#Zemljevid INDEKSA eko-izdatkov glede na BDP==============================================================
+#6. Zemljevid INDEKSA eko-izdatkov glede na BDP (2016)==============================================================
 ## Izracun ----
 ekoizdatki.v.bdp <- inner_join(bdp, eko.potrosnja, by=c("Drzava", "Leto"))
-ekoizdatki.v.bdp <- transform(ekoizdatki.v.bdp, ekoizdatki.v.bdp.stolpec = 
-                                round((Izdatki.za.ekologijio / BDP.E), digits=4))
-ekoizdatki.v.bdp <- ekoizdatki.v.bdp[,c(-3,-4)]
-
+ekoizdatki.v.bdp <- ekoizdatki.v.bdp %>% 
+  transform(ekoizdatki.v.bdp.stolpec = round((Izdatki.za.ekologijio / BDP.E), digits=4)) %>%
+  filter(Leto == 2016) %>% 
+  right_join(europe, by=c("Drzava"="NAME"))
+  
 ## Zemljevid ----
 zemljevid.izdatki.v.bdp.2016 <- ggplot() + 
-  geom_polygon(data = ekoizdatki.v.bdp %>% 
-                 filter(Leto == 2016) %>% 
-                 right_join(europe, by=c("Drzava"="NAME")), aes(x=long, y=lat, group=group, fill=ekoizdatki.v.bdp.stolpec)) + 
+  geom_polygon(data=ekoizdatki.v.bdp, 
+               aes(x=long, y=lat, group=group, fill=ekoizdatki.v.bdp.stolpec)) + 
   theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank(), 
         panel.background = element_blank()) + 
   labs(title = "Zemljevid indeksa izdatki za ekologijo glede na BDP",
@@ -113,10 +118,9 @@ zemljevid.izdatki.v.bdp.2016 <- ggplot() +
         legend.position="right") +
   scale_fill_gradient(high="#B2FF66", low="#193300")
 
-# plot(zemljevid.izdatki.v.bdp.2016)
+#plot(zemljevid.izdatki.v.bdp.2016)
 
-
-# Razvrščanje (Cluster) ==================================================================================================
+# 7. Razvrščanje (Cluster) ==================================================================================================
 ##Podobnosti med državami glede na letni BDP in izpuščene emisije
 podobnosti <- dcast(bdp, Drzava~Leto, value.var='BDP.E')
 priprava.plini <- emisije %>% 
@@ -131,7 +135,7 @@ skupine2 <- cutree(fit, 5)
 cluster2 <- mutate(podobnosti, skupine2)
 
 zemljevid.cluster <- ggplot() + 
-  geom_polygon(data = right_join(cluster2[c(-2:-31)], europe, by=c('Drzava')), 
+  geom_polygon(data=right_join(cluster2[c(-2:-31)], europe, by=c('Drzava')), 
                aes(x=long, y=lat, group=group, fill=factor(skupine2))) + 
   geom_line() +
   theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank(), 
@@ -143,7 +147,7 @@ zemljevid.cluster <- ggplot() +
 # print(zemljevid.cluster)
 
 
-# Plotly: Pobrani davki in izmerjene vrednosti emisij ================================================
+# 8. Plotly: Pobrani davki in izmerjene vrednosti emisij ================================================
 plotly.tabela <- inner_join(eko.davki, emisije, by=c('Drzava','Leto'))
 plotly.tabela <- plotly.tabela %>% 
   filter(Leto >= "2008" & Sector.gospodarstva == "Total - all NACE activities") %>%
@@ -162,11 +166,11 @@ plotly.graf2 <- ggplotly(plotly.graf2, dynamicTics=TRUE, width=900)
 # print(plotly.graf2)
 
 
-# Graf KOLICINE EMISIJ VSEH SEKTORJEV GLEDE na povrsino gozda (2017) ===============================
+# 9. Graf KOLICINE EMISIJ VSEH SEKTORJEV GLEDE na povrsino gozda (2017) ===============================
 ## Izracun ----
 gozd.emisije <- inner_join(gozd, emisije, by="Drzava")
 gozd.emisije <- gozd.emisije %>% 
-  filter(Leto == 2017 & Sector.gospodarstva == "Total - all NACE activities") %>%
+  filter(Leto == 2017 & Sector.gospodarstva == "Total - all NACE activities" & skupne.emisije != "0") %>%
   transform(Emisije.na.povrsino = skupne.emisije / Povrsina.gozda)
 gozd.emisije <- gozd.emisije[,-c(2:5)]
 
@@ -186,13 +190,13 @@ graf.gozd.emisije <- ggplot(gozd.emisije.graf,
   theme(axis.text.x=element_text(angle=90, hjust=1, vjust=0.5)) +
   theme(plot.title = element_text(hjust=0.5, size=15, face="bold"))
 
-# plot(graf.gozd.emisije)
+plot(graf.gozd.emisije)
 
 
-#FUNKCIJA ZA SHINY==============================================================================================
+# 10. FUNKCIJA ZA SHINY==============================================================================================
 zemljevid.leto <- function(letnica, sektor="Total - all NACE activities") {
   
-  ggplot() + geom_polygon(data = emisije %>% 
+  ggplot() + geom_polygon(data=emisije %>% 
                             filter(Leto == letnica & Sector.gospodarstva == sektor) %>%
                             right_join(europe, by=c("Drzava"="NAME")) %>%
                             transform(skupne.emisije = round(skupne.emisije / 1000000, 4)),
