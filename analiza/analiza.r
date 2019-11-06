@@ -22,9 +22,9 @@ graf.napovedi.praga.slo <- ggplot(eko.potrosnja.slovenija, aes(x=Leto, y=Izdatki
 
 
 ##Napoved ekoloških izdatkov Nemčije v prihodnjih letih =======================================
-eko.potrosnja.nemcija <- eko.potrosnja %>% filter(Drzava == 'Germany')
-eko.potrosnja.nemcija <- transform(eko.potrosnja.nemcija, 
-                                   Izdatki.za.ekologijio = eko.potrosnja.nemcija$Izdatki.za.ekologijio / 1000)
+eko.potrosnja.nemcija <- eko.potrosnja %>% 
+  filter(Drzava == 'Germany') %>% 
+  transform(Izdatki.za.ekologijio = Izdatki.za.ekologijio / 1000)
 
 napoved <- lm(data=eko.potrosnja.nemcija, eko.potrosnja.nemcija$Izdatki.za.ekologijio ~Leto)
 dodatna.leta <- data.frame(Leto=seq(2017,2021,1))

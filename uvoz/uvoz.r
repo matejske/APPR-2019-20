@@ -6,8 +6,8 @@ bdp <- read_csv('podatki/BDP.csv', skip=1,
                 na=c(":", " ", "", "-"),
                 locale=locale(grouping_mark=".", encoding="Windows-1250"))
 
-bdp <- bdp[,c(-1, -4)]
 bdp <- bdp %>% 
+  select(Drzava, Leto, BDP.E) %>%
   filter(BDP.E != "") %>% 
   filter(Leto >= 1998 & Leto <= 2017) %>% 
   filter(Drzava != "European Union - 28 countries" & 
@@ -22,8 +22,6 @@ bdp$Drzava <- gsub('^Kosovo.*', 'Kosovo', bdp$Drzava)
 bdp$BDP.E <- as.numeric(bdp$BDP.E)
 
 
-
-
 #2. TABELA: Izmerjene vrednosti emisij (v tonah) (1995-2017)==========================================================
 emisije <- read_csv('podatki/emisije.csv', na=c(":", " ", "", "-"), skip=1,
                     locale=locale(grouping_mark=" ", encoding="Windows-1250"),
@@ -32,9 +30,7 @@ emisije <- read_csv('podatki/emisije.csv', na=c(":", " ", "", "-"), skip=1,
 
 emisije <- emisije %>% 
   group_by(Drzava, Leto, Sector.gospodarstva) %>%
-  summarise(skupne.emisije=sum(Izpuscene.emisije, na.rm=TRUE))
-
-emisije <- emisije  %>%
+  summarise(skupne.emisije=sum(Izpuscene.emisije, na.rm=TRUE)) %>%
   filter(Leto >= 1998 & Leto <= 2017) %>%
   filter(Drzava != "European Union - 28 countries" &
            Drzava != "European Union - 28 countries" &
@@ -63,7 +59,6 @@ uvozi.gozd <- function(){
     html_table()
 }
 
-
 # Čiscenje podatkov
 gozd <- uvozi.gozd()
 gozd <- gozd[,-1]
@@ -83,8 +78,8 @@ eko.potrosnja <- read_csv(file = 'podatki/ekoloska_potrosnja.csv', skip=1,
                           col_names = c("A", "Drzava", "Leto", "B", "Izdatki.za.ekologijio"),
                           na=c(":", " ", "", "-"))
 
-eko.potrosnja <- eko.potrosnja[, c(-1, -4)]
-eko.potrosnja <- eko.potrosnja  %>% 
+eko.potrosnja <- eko.potrosnja  %>%
+  select(Drzava, Leto, Izdatki.za.ekologijio) %>%
   filter(Izdatki.za.ekologijio != "") %>% 
   filter(Leto >= 1998 & Leto <= 2017) %>% 
   filter(Drzava != "European Union - 28 countries" &
@@ -104,17 +99,15 @@ eko.potrosnja$Drzava <- gsub('^Kosovo.*', 'Kosovo', eko.potrosnja$Drzava)
 eko.potrosnja$Izdatki.za.ekologijio <- as.numeric(eko.potrosnja$Izdatki.za.ekologijio)
 
 
-
-
 #5. TABELA: ŠTEVILO PREBIVALCEV (1960-2018)==========================================================================
 populacija <- read_csv('podatki/populacija.csv', skip=1,
                        locale=locale(grouping_mark=".", encoding="Windows-1250"),
                        col_names = c("A", "Drzava", "Leto", "B", "C", "Stevilo.prebivalcev"),
                        na=c(":", " ", "", "-"))
-populacija <- populacija %>% filter(B == "Total")
 
-populacija <- populacija [, c(-1, -4, -5)]
-populacija <- populacija  %>% 
+populacija <- populacija %>%
+  filter(B == "Total") %>%
+  select(Drzava, Leto, Stevilo.prebivalcev) %>%
   filter(Stevilo.prebivalcev != "") %>% 
   filter(Leto >= 1998 & Leto <= 2017) %>% 
   filter(Drzava != "European Union - 28 countries" &
@@ -131,7 +124,6 @@ populacija$Drzava <- gsub('^Germany.*', 'Germany', populacija$Drzava)
 populacija$Drzava <- gsub('^France.*', 'France', populacija$Drzava)
 populacija$Drzava <- gsub('^Kosovo.*', 'Kosovo', populacija$Drzava)
 populacija$Stevilo.prebivalcev <- as.numeric(populacija$Stevilo.prebivalcev)
-
 
 
 #6. TABELA: Pobrani davki s strani ekoloških dajatev (v miljonih evrov) (1995-2017)===================================
@@ -154,13 +146,13 @@ eko.davki <- eko.davki  %>%
            Drzava != "Euro area (19 countries)" &
            Drzava != "Euro area (18 countries)" &
            Drzava != "Euro area (17 countries)" & 
-           Drzava != "Euro area (12 countries)")
-eko.davki <- eko.davki[,c(-1,-4)]
+           Drzava != "Euro area (12 countries)") %>%
+  select(Drzava, Leto, Pobrani.davki)
+
 eko.davki$Drzava <- gsub('^Germany.*', 'Germany', eko.davki$Drzava)
 eko.davki$Drzava <- gsub('^Kosovo.*', 'Kosovo', eko.davki$Drzava)
 
 eko.davki$Pobrani.davki <- as.numeric(eko.davki$Pobrani.davki)
-
 
 
 #IZVOZ TABEL (Tidy Data)=====================================================================================
