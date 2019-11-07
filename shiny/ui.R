@@ -14,7 +14,7 @@ shinyUI(fluidPage(
       selectInput("sektor", 
                   "Izberi sektor gospodarstva",
                   choices=izbire,
-                  selected = "Construction"
+                  selected = "Agriculture, forestry and fishing"
                   ),
       sliderInput("leto", 
                   "Izberi leto", 

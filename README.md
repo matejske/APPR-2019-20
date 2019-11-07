@@ -20,33 +20,28 @@ Tabele:
 2. `emisije` - letne meritve  treh najškodljivejših toplogrednih plinov v ozračju po sektorjih gospodarstva 
   - `Drzava` - spremenljivka: imena opazovanih držav, (neurejen faktor)
   - `Leto` - spremenljivka: leto testiranja, (število)
-  - `Merjen.plin` - spremenljivka: vrsta plina (Carbon dioxide, Carbon dioxide, Nitrous oxide), (neurejen faktor)
   - `Sector.gospodarstva` - spremenljivka: sektor gospodarstva, ki je v zrak izpustil določeno količino plina, (neurejen faktor)
-  - `Izpuscene.emisije` - meritev: letna izmerjena količina v tonah, (število)
+  - `skupne.emisije` - meritev: letna izmerjena količina v tonah, (število)
 
 3. `gozd` - površina gozdnatih površin v kvadratnih kilometrih v letu 2017
   - `Drzava` - spremenljivka: imena opazovanih držav, (neurejen faktor)
   - `Povrsina.gozda` - meritev: skupna površina v kvadratnih kilometrih, (število)
 
-4. `dolg` - konsolidirani državni dolg Konsolidirani državni dolg (1998-2017)
-  - `Drzava` - spremenljivka: imena opazovanih držav, (neurejen faktor)
-  - `Leto` - spremenljivka: leto testiranja, (število)
-  - `Dolg` - meritev: vrednost dolga v milijonih evrov, (število)
-
-5. `eko.potrosnja` - letni državni izdatki za ekologijo (1998-2017)
+4. `eko.potrosnja` - letni državni izdatki za ekologijo (1998-2017)
   - `Drzava` - spremenljivka: imena opazovanih držav, (neurejen faktor)
   - `Leto` - spremenljivka: leto testiranja, (število)
   - `Izdatki.za.ekologijio` - meritev: izdatki (potrošnja) držav za ekologijo v milijonih evrov, (število)
   
-6. `populacija` - število prebivalcev držav Evropske unije (1998-2017)
+5. `populacija` - število prebivalcev držav Evropske unije (1998-2017)
   - `Drzava` - spremenljivka: imena opazovanih držav, (neurejen faktor)
   - `Leto` - spremenljivka: leto testiranja, (število)
   - `Stevilo.prebivalcev` - meritev: število prebivalcev, (število)
 
-7. `eko.davki` - letni državni prihodki s strani ekoloških davkov za podjetja in posameznike
+6. `eko.davki` - letni državni prihodki s strani ekoloških davkov za podjetja in posameznike
   - `Drzava` - spremenljivka: imena opazovanih držav, (neurejen faktor)
   - `Leto` - spremenljivka: leto testiranja, (število)
   - `Pobrani.davki` - meritev: vrednost pobranih ekoloških davkov v milijonih evrov, (število)
+
 
 Podatki bodo obsegali obdobje zadnjih 20 let, torej 1998 - 2018.
 

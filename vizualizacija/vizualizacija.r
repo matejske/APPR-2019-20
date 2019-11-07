@@ -197,7 +197,6 @@ graf.gozd.emisije <- ggplot(gozd.emisije,
 zemljevid.leto <- function(letnica, sektor) {
   
   ggplot() + geom_polygon(data=emisije %>%
-                            filter(Sector.gospodarstva != "Total - all NACE activities") %>%
                             filter(Leto == letnica & Sector.gospodarstva == sektor) %>%
                             right_join(europe, by=c("Drzava"="NAME")) %>%
                             transform(skupne.emisije = round(skupne.emisije / 1000000, 4)),
